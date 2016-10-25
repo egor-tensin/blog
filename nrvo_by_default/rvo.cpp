@@ -44,10 +44,21 @@ namespace
         return C{};
     }
 
+    C make_prevent_rvo()
+    {
+        return std::move(C{});
+    }
+
     C make_nrvo()
     {
         C c;
         return c;
+    }
+
+    C make_prevent_nrvo()
+    {
+        C c;
+        return std::move(c);
     }
 }
 
@@ -68,6 +79,42 @@ int main()
     {
         std::cout << "C c = make_rvo()\n";
         C c = make_rvo();
+    }
+    {
+        std::cout << "C c(make_nrvo())\n";
+        C c(make_nrvo());
+    }
+    {
+        std::cout << "C c{make_nrvo())\n";
+        C c{make_nrvo()};
+    }
+    {
+        std::cout << "C c = make_nrvo()\n";
+        C c{make_nrvo()};
+    }
+    {
+        std::cout << "C c(make_prevent_rvo())\n";
+        C c(make_prevent_rvo());
+    }
+    {
+        std::cout << "C c{make_prevent_rvo()}\n";
+        C c{make_prevent_rvo()};
+    }
+    {
+        std::cout << "C c = make_prevent_rvo()\n";
+        C c = make_prevent_rvo();
+    }
+    {
+        std::cout << "C c(make_prevent_nrvo())\n";
+        C c(make_prevent_nrvo());
+    }
+    {
+        std::cout << "C c{make_prevent_nrvo()}\n";
+        C c{make_prevent_nrvo()};
+    }
+    {
+        std::cout << "C c = make_prevent_nrvo()\n";
+        C c = make_prevent_nrvo();
     }
     return 0;
 }
