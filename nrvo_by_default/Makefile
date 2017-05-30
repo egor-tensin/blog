@@ -5,7 +5,7 @@
 #
 #     > make CXX=x86_64-w64-mingw32-g++
 
-CXXFLAGS = -Wall -Wextra -DNDEBUG -std=c++11 -static-libgcc -static-libstdc++ -s
+CXXFLAGS = -Wall -Wextra -DNDEBUG -std=c++11 -static -s
 
 optimization_levels = 0 1 2 3
 
