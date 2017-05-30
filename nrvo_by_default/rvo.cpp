@@ -1,3 +1,8 @@
+// Copyright (c) 2015 Egor Tensin <Egor.Tensin@gmail.com>
+// This file is part of the "C++ notes" project.
+// For details, see https://github.com/egor-tensin/cpp-notes.
+// Distributed under the MIT License.
+
 #include <iostream>
 #include <utility>
 
