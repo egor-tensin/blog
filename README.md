@@ -1,8 +1,8 @@
-C++ notes
-=========
+Egor's blog
+===========
 
-Personal C++ notes.
-See the corresponding blog at https://egor-tensin.github.io/cpp-notes/.
+Egor's blog on programming.
+Hosted at https://egor-tensin.github.io/blog/.
 
 License
 -------

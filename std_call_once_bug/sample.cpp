@@ -1,6 +1,6 @@
 // Copyright (c) 2016 Egor Tensin <Egor.Tensin@gmail.com>
-// This file is part of the "C++ notes" project.
-// For details, see https://github.com/egor-tensin/cpp-notes.
+// This file is part of the "Egor's blog" project.
+// For details, see https://github.com/egor-tensin/blog.
 // Distributed under the MIT License.
 
 #include <ctime>
