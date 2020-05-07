@@ -1,9 +1,8 @@
+# Jekyll
 plugins:
   - jekyll-paginate
   - jekyll-github-metadata
   - jekyll-remote-theme
-
-remote_theme: egor-tensin/jekyll-theme
 
 exclude:
   - .travis.yml
@@ -14,8 +13,6 @@ exclude:
   - serve.bat
   - serve.sh
   - README.md
-
-paginate: 10
 
 collections:
   notes:
@@ -45,30 +42,34 @@ defaults:
     values:
       layout: category
 
-excerpt_separator: ""
-include_comments: true
-minified_externals: true
-
 highlighter: rouge
-
 markdown: kramdown
-
 kramdown:
   math_engine: null # Ignored by GitHub Pages, yay, how fun!
   syntax_highlighter_opts:
     span:
       disable: true
 
+# jekyll-paginate
+paginate: 10
+# jekyll-github-metadata
+repository: egor-tensin/blog
+# jekyll-remote-theme
+remote_theme: egor-tensin/jekyll-theme
+
+# egor-tensin/jekyll-theme
 bootstrap_version: 3.3.7
 jquery_version: 1.12.4
 html5shiv_version: 3.7.3
 respond_version: 1.4.2
 
+excerpt_separator: ""
+minified_externals: true
+
 project:
   name: Blog
   description: Egor's blog on programming
 baseurl: /blog
-repository: egor-tensin/blog
 personal_info:
   name: Egor Tensin
   email: Egor.Tensin@gmail.com
