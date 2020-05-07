@@ -145,8 +145,8 @@ service to restart if `ssh` fails:
 
 <div class="row">
   <div class="col-xs-12 col-sm-8 col-md-6">
-    <a href="{{ site.baseurl }}/img/ssh_tunnel_services.png" class="thumbnail">
-      <img class="img-responsive" alt="services.msc" src="{{ site.baseurl }}/img/ssh_tunnel_services.png">
+    <a href="{{ site.baseurl }}/assets/img/ssh_tunnel_services.png" class="thumbnail">
+      <img class="img-responsive" alt="services.msc" src="{{ site.baseurl }}/assets/img/ssh_tunnel_services.png">
     </a>
   </div>
 </div>

@@ -1,6 +1,9 @@
 plugins:
   - jekyll-paginate
   - jekyll-github-metadata
+  - jekyll-remote-theme
+
+remote_theme: egor-tensin/jekyll-theme
 
 exclude:
   - .travis.yml
