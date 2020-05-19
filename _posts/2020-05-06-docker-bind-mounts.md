@@ -163,8 +163,9 @@ every machine (each time when creating a container).
 For my project [jekyll-docker] I opted for the former approach, making sure the
 `jekyll` process runs with the same UID as the user who built the image (unless
 it was built by root, in which case it falls back to a custom UID of 999).
+Seems to work quite nicely in practice.
 
-[jekyll-docker]: https://github.com/egor-tensin/jekyll-docker
+[jekyll-docker]: https://github.com/egor-tensin/jekyll-docker/tree/7d1824a5fac0ed483bc49209bbd89f564a7bcefe
 
 Useful links
 ------------
