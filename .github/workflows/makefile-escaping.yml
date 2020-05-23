@@ -1,0 +1,109 @@
+name: Escaping characters in Makefile
+
+on: [push, pull_request]
+
+jobs:
+  quoting_arguments:
+    name: Quoting arguments
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Make Makefile
+        run: |
+          cd makefile_escaping
+          cp prologue.mk Makefile
+          cat quoting_args.mk >> Makefile
+      - name: make test
+        run: |
+          cd makefile_escaping
+          diff <( echo "$expected" ) <( make test )
+    env:
+      expected: |-
+        printf '%s\n' Same line?
+        Same
+        line?
+        printf '%s\n' 'Same line?'
+        Same line?
+        printf '%s\n' $test_var
+        Same
+        line?
+        printf '%s\n' "$test_var"
+        Same line?
+  escaping_quotes:
+    name: Escaping quotes
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Make Makefile
+        run: |
+          cd makefile_escaping
+          cp prologue.mk Makefile
+          cat quotes.mk >> Makefile
+      - name: make test
+        run: |
+          cd makefile_escaping
+          diff <( echo "$expected" ) <( make test )
+    env:
+      expected: |-
+        printf '%s\n' 'Includes '\'' quote'
+        Includes ' quote
+        bash -c 'printf '\''%s\n'\'' '\''Includes '\''\'\'''\'' quote'\'''
+        Includes ' quote
+        bash -c 'bash -c '\''printf '\''\'\'''\''%s\n'\''\'\'''\'' '\''\'\'''\''Includes '\''\'\'''\''\'\''\'\'''\'''\''\'\'''\'' quote'\''\'\'''\'''\'''
+        Includes ' quote
+  shell_output:
+    name: Shell output
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Make Makefile
+        run: |
+          cd makefile_escaping
+          cp prologue.mk Makefile
+          cat shell.mk >> Makefile
+      - name: make test
+        run: |
+          cd makefile_escaping
+          diff <( echo "$expected_includes_quote"     ) <( mkdir -p -- "Includes ' quote"      && cd -- "Includes ' quote"      && make -f ../Makefile test )
+          diff <( echo "$expected_maybe_comment"      ) <( mkdir -p -- 'Maybe a comment #'     && cd -- 'Maybe a comment #'     && make -f ../Makefile test )
+          diff <( echo "$expected_variable_reference" ) <( mkdir -p -- 'Variable ${reference}' && cd -- 'Variable ${reference}' && make -f ../Makefile test )
+    env:
+      expected_includes_quote: |-
+        Includes ' quote
+        Includes ' quote
+        Includes ' quote
+        Includes ' quote
+      expected_maybe_comment: |-
+        Maybe a comment #
+        Maybe a comment #
+        Maybe a comment #
+        Maybe a comment #
+      expected_variable_reference: |-
+        Variable ${reference}
+        Variable ${reference}
+        Variable ${reference}
+        Variable ${reference}
+  env_variables:
+    name: Environment variables
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Make Makefile
+        run: |
+          cd makefile_escaping
+          cp prologue.mk Makefile
+          cat env_vars.mk >> Makefile
+      - name: make test
+        run: |
+          cd makefile_escaping
+          diff <( echo "$expected" ) <( test_var="Quote ' "'and variable ${reference}' make test )
+    env:
+      expected: |-
+        Quote ' and variable ${reference}
+        Quote ' and variable ${reference}
+        Quote ' and variable ${reference}
+        Quote ' and variable ${reference}
