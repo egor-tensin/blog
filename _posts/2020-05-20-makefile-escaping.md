@@ -43,11 +43,13 @@ and you're good to go.
 
   You can then replace `'$(shell your-command arg1 arg2)'` with
 `'$(call escape,$(shell your-command arg1 arg2))'`.
-* To escape environment variable values, define another helper function:
+* To escape environment variable values, redefine them using the `$(value)`
+function:
 
-      escape_var = $(call escape,$(value $(1)))
+      test_var ?= Default value
+      test_var := $(value test_var)
 
-  You can then replace `'$(VAR_NAME)'` with `'$(call escape_var,VAR_NAME)'`.
+  Then use the same `escape` function: `'$(call escape,$(test_var))'`.
 * Don't override variables using `make var1=value1 var2=value2`, use your shell
 instead: `var1=value1 var2=value2 make`.
 
@@ -174,8 +176,13 @@ escape = $(subst ','\'',$(1))
 cwd := $(shell basename -- "$$( pwd )")
 export cwd
 
+inner_var := Inner variable
+outer_var := Outer variable - $(inner_var) - $(cwd)
+
 echo_cwd := printf '%s\n' '$(call escape,$(cwd))'
 bash_cwd := bash -c '$(call escape,$(echo_cwd))'
+
+echo_outer_var := printf '%s\n' '$(call escape,$(outer_var))'
 
 .PHONY: test
 test:
@@ -183,24 +190,32 @@ test:
 	@printf '%s\n' "$$cwd"
 	@bash -c '$(call escape,$(echo_cwd))'
 	@bash -c '$(call escape,$(bash_cwd))'
+	@printf '%s\n' '$(call escape,$(outer_var))'
+	@bash -c '$(call escape,$(echo_outer_var))'
 
 $ ( mkdir -p -- "Includes ' quote" && cd -- "Includes ' quote" && make -f ../Makefile test ; )
 Includes ' quote
 Includes ' quote
 Includes ' quote
 Includes ' quote
+Outer variable - Inner variable - Includes ' quote
+Outer variable - Inner variable - Includes ' quote
 
 $ ( mkdir -p -- 'Maybe a comment #' && cd -- 'Maybe a comment #' && make -f ../Makefile test ; )
 Maybe a comment #
 Maybe a comment #
 Maybe a comment #
 Maybe a comment #
+Outer variable - Inner variable - Maybe a comment #
+Outer variable - Inner variable - Maybe a comment #
 
 $ ( mkdir -p -- 'Variable ${reference}' && cd -- 'Variable ${reference}' && make -f ../Makefile test ; )
 Variable ${reference}
 Variable ${reference}
 Variable ${reference}
 Variable ${reference}
+Outer variable - Inner variable - Variable ${reference}
+Outer variable - Inner variable - Variable ${reference}
 ```
 
 Environment variables
@@ -270,29 +285,36 @@ Turns out, you can do just that using the `value` function in `make`.
 ```
 $ cat > Makefile
 escape = $(subst ','\'',$(1))
-escape_var = $(call escape,$(value $(1)))
 
 test_var ?= This is safe.
+test_var := $(value test_var)
 export test_var
 
-echo_test_var := printf '%s\n' '$(call escape_var,test_var)'
-bash_test_var := bash -c '$(call escape_var,echo_test_var)'
+inner_var := Inner variable
+outer_var := Outer variable - $(inner_var) - $(test_var)
+
+echo_test_var := printf '%s\n' '$(call escape,$(test_var))'
+bash_test_var := bash -c '$(call escape,$(echo_test_var))'
+
+echo_outer_var := printf '%s\n' '$(call escape,$(outer_var))'
 
 .PHONY: test
 test:
-	@printf '%s\n' '$(call escape_var,test_var)'
+	@printf '%s\n' '$(call escape,$(test_var))'
 	@printf '%s\n' "$$test_var"
-	@bash -c '$(call escape_var,echo_test_var)'
-	@bash -c '$(call escape_var,bash_test_var)'
+	@bash -c '$(call escape,$(echo_test_var))'
+	@bash -c '$(call escape,$(bash_test_var))'
+	@printf '%s\n' '$(call escape,$(outer_var))'
+	@bash -c '$(call escape,$(echo_outer_var))'
 
-$ test_var='Variable ${reference}' make test
-Variable ${reference}
-Variable ${reference}
-Variable ${reference}
-Variable ${reference}
+$ test_var="Quote '"' and variable ${reference}' make test
+Quote ' and variable ${reference}
+Quote ' and variable ${reference}
+Quote ' and variable ${reference}
+Quote ' and variable ${reference}
+Outer variable - Inner variable - Quote ' and variable ${reference}
+Outer variable - Inner variable - Quote ' and variable ${reference}
 ```
-
-You can still use the original `escape` function to escape `shell` output.
 
 One thing to note is that I couldn't find a way to prevent variable values from
 being expanded when [overriding variables] on the command line.
@@ -302,18 +324,28 @@ For example, this doesn't work:
 
 ```
 $ make test test_var='Variable ${reference}'
+Makefile:23: warning: undefined variable 'reference'
 make: warning: undefined variable 'reference'
-Variable ${reference}
 Variable
-Variable ${reference}
-Variable ${reference}
-
-$ make test test_var='Variable $${reference}'
-Variable $${reference}
-Variable ${reference}
-Variable $${reference}
-Variable $${reference}
+Variable
+Variable
+Variable
+Outer variable - Inner variable - Variable
+Outer variable - Inner variable - Variable
 ```
 
-As a workaround, set parameter values using your shell: `var_name=value make
-...`.
+One way to fix this is to escape the dollar sign using `make` syntax:
+
+```
+$ make test test_var='Variable $${reference}'
+Variable ${reference}
+Variable ${reference}
+Variable ${reference}
+Variable ${reference}
+Outer variable - Inner variable - Variable ${reference}
+Outer variable - Inner variable - Variable ${reference}
+```
+
+But that's messy.
+An easy workaround would be to set parameter values using your shell:
+`var_name=value make ...`.
