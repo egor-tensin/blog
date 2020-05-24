@@ -76,16 +76,22 @@ jobs:
         Includes ' quote
         Includes ' quote
         Includes ' quote
+        Outer variable - Inner variable - Includes ' quote
+        Outer variable - Inner variable - Includes ' quote
       expected_maybe_comment: |-
         Maybe a comment #
         Maybe a comment #
         Maybe a comment #
         Maybe a comment #
+        Outer variable - Inner variable - Maybe a comment #
+        Outer variable - Inner variable - Maybe a comment #
       expected_variable_reference: |-
         Variable ${reference}
         Variable ${reference}
         Variable ${reference}
         Variable ${reference}
+        Outer variable - Inner variable - Variable ${reference}
+        Outer variable - Inner variable - Variable ${reference}
   env_variables:
     name: Environment variables
     runs-on: ubuntu-18.04
@@ -107,3 +113,5 @@ jobs:
         Quote ' and variable ${reference}
         Quote ' and variable ${reference}
         Quote ' and variable ${reference}
+        Outer variable - Inner variable - Quote ' and variable ${reference}
+        Outer variable - Inner variable - Quote ' and variable ${reference}
