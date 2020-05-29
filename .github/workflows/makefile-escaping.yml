@@ -40,7 +40,7 @@ jobs:
         run: |
           cd makefile_escaping
           cp prologue.mk Makefile
-          cat quotes.mk >> Makefile
+          cat escaping_quotes.mk >> Makefile
       - name: make test
         run: |
           cd makefile_escaping
@@ -63,7 +63,7 @@ jobs:
         run: |
           cd makefile_escaping
           cp prologue.mk Makefile
-          cat shell.mk >> Makefile
+          cat escaping_shell.mk >> Makefile
       - name: make test
         run: |
           cd makefile_escaping
@@ -102,7 +102,7 @@ jobs:
         run: |
           cd makefile_escaping
           cp prologue.mk Makefile
-          cat env_vars.mk >> Makefile
+          cat escaping_env_vars.mk >> Makefile
       - name: make test
         run: |
           cd makefile_escaping
