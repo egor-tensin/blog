@@ -9,15 +9,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Make Makefile
-        run: |
-          cd makefile_escaping
-          cp prologue.mk Makefile
-          cat quoting_args.mk >> Makefile
       - name: make test
         run: |
           cd makefile_escaping
-          diff <( echo "$expected" ) <( make test )
+          diff <( echo "$expected" ) <( make -f quoting_args.mk test )
     env:
       expected: |-
         printf '%s\n' Same line?
@@ -36,15 +31,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Make Makefile
-        run: |
-          cd makefile_escaping
-          cp prologue.mk Makefile
-          cat escaping_quotes.mk >> Makefile
       - name: make test
         run: |
           cd makefile_escaping
-          diff <( echo "$expected" ) <( make test )
+          diff <( echo "$expected" ) <( make -f escaping_quotes.mk test )
     env:
       expected: |-
         printf '%s\n' 'Includes '\'' quote'
@@ -59,17 +49,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Make Makefile
-        run: |
-          cd makefile_escaping
-          cp prologue.mk Makefile
-          cat escaping_shell.mk >> Makefile
       - name: make test
         run: |
           cd makefile_escaping
-          diff <( echo "$expected_includes_quote"     ) <( mkdir -p -- "Includes ' quote"      && cd -- "Includes ' quote"      && make -f ../Makefile test )
-          diff <( echo "$expected_maybe_comment"      ) <( mkdir -p -- 'Maybe a comment #'     && cd -- 'Maybe a comment #'     && make -f ../Makefile test )
-          diff <( echo "$expected_variable_reference" ) <( mkdir -p -- 'Variable ${reference}' && cd -- 'Variable ${reference}' && make -f ../Makefile test )
+          diff <( echo "$expected_includes_quote"     ) <( mkdir -p -- "Includes ' quote"      && cd -- "Includes ' quote"      && make -f ../escaping_shell.mk test )
+          diff <( echo "$expected_maybe_comment"      ) <( mkdir -p -- 'Maybe a comment #'     && cd -- 'Maybe a comment #'     && make -f ../escaping_shell.mk test )
+          diff <( echo "$expected_variable_reference" ) <( mkdir -p -- 'Variable ${reference}' && cd -- 'Variable ${reference}' && make -f ../escaping_shell.mk test )
     env:
       expected_includes_quote: |-
         Includes ' quote
@@ -98,15 +83,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Make Makefile
-        run: |
-          cd makefile_escaping
-          cp prologue.mk Makefile
-          cat escaping_env_vars.mk >> Makefile
       - name: make test
         run: |
           cd makefile_escaping
-          diff <( echo "$expected" ) <( test_var="Quote ' "'and variable ${reference}' make test )
+          diff <( echo "$expected" ) <( test_var="Quote ' "'and variable ${reference}' make -f escaping_env_vars.mk test )
     env:
       expected: |-
         Quote ' and variable ${reference}
