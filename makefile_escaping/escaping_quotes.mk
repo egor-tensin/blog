@@ -9,9 +9,7 @@ escape = $(subst ','\'',$(1))
 
 test_var := Includes ' quote
 
-# printf $test_var
 echo_test_var := printf '%s\n' '$(call escape,$(test_var))'
-# bash -c 'printf $test_var'
 bash_test_var := bash -c '$(call escape,$(echo_test_var))'
 
 test:

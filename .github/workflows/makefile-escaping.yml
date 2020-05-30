@@ -15,15 +15,11 @@ jobs:
           diff <( echo "$expected" ) <( make -f quoting_args.mk test )
     env:
       expected: |-
-        printf '%s\n' Same line?
         Same
         line?
-        printf '%s\n' 'Same line?'
         Same line?
-        printf '%s\n' $test_var
         Same
         line?
-        printf '%s\n' "$test_var"
         Same line?
   escaping_quotes:
     name: Escaping quotes
@@ -49,49 +45,53 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: make test
+      - name: "Includes ' quote"
         run: |
           cd makefile_escaping
           diff <( echo "$expected_includes_quote"     ) <( mkdir -p -- "Includes ' quote"      && cd -- "Includes ' quote"      && make -f ../escaping_shell.mk test )
+      - name: 'Maybe a comment #'
+        run: |
+          cd makefile_escaping
           diff <( echo "$expected_maybe_comment"      ) <( mkdir -p -- 'Maybe a comment #'     && cd -- 'Maybe a comment #'     && make -f ../escaping_shell.mk test )
+      - name: 'Variable ${reference}'
+        run: |
+          cd makefile_escaping
           diff <( echo "$expected_variable_reference" ) <( mkdir -p -- 'Variable ${reference}' && cd -- 'Variable ${reference}' && make -f ../escaping_shell.mk test )
     env:
       expected_includes_quote: |-
         Includes ' quote
-        Includes ' quote
-        Includes ' quote
-        Includes ' quote
-        Outer variable - Inner variable - Includes ' quote
-        Outer variable - Inner variable - Includes ' quote
+        Composite value - Simple value - Includes ' quote
       expected_maybe_comment: |-
         Maybe a comment #
-        Maybe a comment #
-        Maybe a comment #
-        Maybe a comment #
-        Outer variable - Inner variable - Maybe a comment #
-        Outer variable - Inner variable - Maybe a comment #
+        Composite value - Simple value - Maybe a comment #
       expected_variable_reference: |-
         Variable ${reference}
-        Variable ${reference}
-        Variable ${reference}
-        Variable ${reference}
-        Outer variable - Inner variable - Variable ${reference}
-        Outer variable - Inner variable - Variable ${reference}
+        Composite value - Simple value - Variable ${reference}
   env_variables:
     name: Environment variables
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: make test
+      - name: make test w/ default test_var
         run: |
           cd makefile_escaping
-          diff <( echo "$expected" ) <( test_var="Quote ' "'and variable ${reference}' make -f escaping_env_vars.mk test )
+          diff <( echo "$expected_default" ) <( make -f escaping_env_vars.mk test )
+      - name: make test w/ tricky test_var
+        run: |
+          cd makefile_escaping
+          diff <( echo "$expected_tricky" ) <( test_var="Quote ' "'and variable ${reference}' make -f escaping_env_vars.mk test )
+      - name: make test w/ overridden test_var
+        run: |
+          cd makefile_escaping
+          diff <( echo "$expected_overridden" ) <( make -f escaping_env_vars.mk test test_var="Quote ' "'and variable ${reference}' )
     env:
-      expected: |-
-        Quote ' and variable ${reference}
-        Quote ' and variable ${reference}
-        Quote ' and variable ${reference}
+      expected_default: |-
+        New simple value (in test_var)
+        Composite value - New simple value - New simple value (in test_var)
+      expected_tricky: |-
         Quote ' and variable ${reference}
         Composite value - New simple value - Quote ' and variable ${reference}
+      expected_overridden: |-
+        Quote ' and variable ${reference}
         Composite value - New simple value - Quote ' and variable ${reference}
