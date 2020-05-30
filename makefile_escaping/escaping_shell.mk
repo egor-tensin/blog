@@ -9,13 +9,10 @@ escape = $(subst ','\'',$(1))
 
 cwd := $(shell basename -- "$$( pwd )")
 
-echo_cwd := printf '%s\n' '$(call escape,$(cwd))'
-bash_cwd := bash -c '$(call escape,$(echo_cwd))'
-
 simple_var := Simple value
-compisite_var := Composite value - $(simple_var) - $(cwd)
+composite_var := Composite value - $(simple_var) - $(cwd)
 
 .PHONY: test
 test:
 	@printf '%s\n' '$(call escape,$(cwd))'
-	@printf '%s\n' '$(call escape,$(compisite_var))'
+	@printf '%s\n' '$(call escape,$(composite_var))'
