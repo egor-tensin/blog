@@ -36,22 +36,40 @@ TL;DR
 
 * Quote command arguments in Makefiles using single quotes `'`.
 * Don't use `'` and `$` in stuff like file paths/environment variable values,
-and you're good to go.
-* To escape `$(shell)` function output, define a helper function:
+and you're pretty much good to go.
+* Define a helper function:
 
       escape = $(subst ','\'',$(1))
 
-  You can then replace `'$(shell your-command arg1 arg2)'` with
+  Use it to safeguard against single quote characters in your variables/function
+outputs.
+  You can then replace things like `'$(dangerous_variable)'` or `'$(shell
+your-command arg1 arg2)'` with `'$(call escape,$(dangerous_variable))'` and
 `'$(call escape,$(shell your-command arg1 arg2))'`.
-* To escape environment variable values, redefine them using the `$(value)`
-function:
+* If you use environment variables in your Makefile (or you override variables
+on the command line), add the following lengthy snippet to prevent the values
+from being expanded:
 
-      test_var ?= Default value
-      test_var := $(value test_var)
+      define escape_arg
+      ifeq ($$(origin $(1)),environment)
+          $(1) := $$(value $(1))
+      endif
+      ifeq ($$(origin $(1)),environment override)
+          $(1) := $$(value $(1))
+      endif
+      ifeq ($$(origin $(1)),command line)
+          override $(1) := $$(value $(1))
+      endif
+      endef
 
-  Then use the same `escape` function: `'$(call escape,$(test_var))'`.
-* Don't override variables using `make var1=value1 var2=value2`, use your shell
-instead: `var1=value1 var2=value2 make`.
+  You can then be sure any accidental variables references (like if the
+environment variable contains `$` as in `Accidental $variable reference`) are
+not expanded if you use the following pattern in the Makefile:
+
+      param1 ?= Default value
+      $(eval $(call escape_arg,param1))
+
+      $(eval $(call escape_arg,param2))
 
 Quoting arguments
 -----------------
@@ -62,26 +80,24 @@ This is to prevent a single argument from being expanded into multiple
 arguments by the shell.
 
 ```
-$ cat > Makefile
+$ cat Makefile
+# Prologue goes here...
+
 test_var := Same line?
 export test_var
 
 test:
-	printf '%s\n' $(test_var)
-	printf '%s\n' '$(test_var)'
-	printf '%s\n' $$test_var
-	printf '%s\n' "$$test_var"
+	@printf '%s\n' $(test_var)
+	@printf '%s\n' '$(test_var)'
+	@printf '%s\n' $$test_var
+	@printf '%s\n' "$$test_var"
 
 $ make test
-printf '%s\n' Same line?
 Same
 line?
-printf '%s\n' 'Same line?'
 Same line?
-printf '%s\n' $test_var
 Same
 line?
-printf '%s\n' "$test_var"
 Same line?
 ```
 
@@ -99,7 +115,9 @@ In that case, even the quoted `printf` invocation would break because of the
 mismatch.
 
 ```
-$ cat > Makefile
+$ cat Makefile
+# Prologue goes here...
+
 test_var := Includes ' quote
 
 test:
@@ -117,7 +135,9 @@ This works because `bash` merges a string like `'Includes '\'' quote'` into
 `Includes ' quote`.
 
 ```
-$ cat > Makefile
+$ cat Makefile
+# Prologue goes here...
+
 escape = $(subst ','\'',$(1))
 
 test_var := Includes ' quote
@@ -137,7 +157,9 @@ I guess the most common use case is doing something like `ssh 'rm -rf
 $(junk_dir)'`, but I'll use nested `bash` calls instead for simplicity.
 
 ```
-$ cat > Makefile
+$ cat Makefile
+# Prologue goes here...
+
 escape = $(subst ','\'',$(1))
 
 test_var := Includes ' quote
@@ -170,52 +192,32 @@ This little `escape` function we've defined is actually sufficient to deal with
 the output of the `shell` function safely.
 
 ```
-$ cat > Makefile
+$ cat Makefile
+# Prologue goes here...
+
 escape = $(subst ','\'',$(1))
 
 cwd := $(shell basename -- "$$( pwd )")
-export cwd
 
-inner_var := Inner variable
-outer_var := Outer variable - $(inner_var) - $(cwd)
-
-echo_cwd := printf '%s\n' '$(call escape,$(cwd))'
-bash_cwd := bash -c '$(call escape,$(echo_cwd))'
-
-echo_outer_var := printf '%s\n' '$(call escape,$(outer_var))'
+simple_var := Simple value
+composite_var := Composite value - $(simple_var) - $(cwd)
 
 .PHONY: test
 test:
 	@printf '%s\n' '$(call escape,$(cwd))'
-	@printf '%s\n' "$$cwd"
-	@bash -c '$(call escape,$(echo_cwd))'
-	@bash -c '$(call escape,$(bash_cwd))'
-	@printf '%s\n' '$(call escape,$(outer_var))'
-	@bash -c '$(call escape,$(echo_outer_var))'
+	@printf '%s\n' '$(call escape,$(composite_var))'
 
 $ ( mkdir -p -- "Includes ' quote" && cd -- "Includes ' quote" && make -f ../Makefile test ; )
 Includes ' quote
-Includes ' quote
-Includes ' quote
-Includes ' quote
-Outer variable - Inner variable - Includes ' quote
-Outer variable - Inner variable - Includes ' quote
+Composite value - Simple value - Includes ' quote
 
 $ ( mkdir -p -- 'Maybe a comment #' && cd -- 'Maybe a comment #' && make -f ../Makefile test ; )
 Maybe a comment #
-Maybe a comment #
-Maybe a comment #
-Maybe a comment #
-Outer variable - Inner variable - Maybe a comment #
-Outer variable - Inner variable - Maybe a comment #
+Composite value - Simple value - Maybe a comment #
 
 $ ( mkdir -p -- 'Variable ${reference}' && cd -- 'Variable ${reference}' && make -f ../Makefile test ; )
 Variable ${reference}
-Variable ${reference}
-Variable ${reference}
-Variable ${reference}
-Outer variable - Inner variable - Variable ${reference}
-Outer variable - Inner variable - Variable ${reference}
+Composite value - Simple value - Variable ${reference}
 ```
 
 Environment variables
@@ -241,28 +243,23 @@ expanded recursively either when defined (for `:=` assignments) or when used
 
 
 ```
-$ cat > Makefile
+$ cat Makefile
+# Prologue goes here...
+
 escape = $(subst ','\'',$(1))
 
 test_var ?= This is safe.
 export test_var
 
-echo_test_var := printf '%s\n' '$(call escape,$(test_var))'
-bash_test_var := bash -c '$(call escape,$(echo_test_var))'
-
 .PHONY: test
 test:
 	@printf '%s\n' '$(call escape,$(test_var))'
 	@printf '%s\n' "$$test_var"
-	@bash -c '$(call escape,$(echo_test_var))'
-	@bash -c '$(call escape,$(bash_test_var))'
 
 $ test_var='Variable ${reference}' make test
-Makefile:18: warning: undefined variable 'reference'
+Makefile:15: warning: undefined variable 'reference'
 Variable
 Variable ${reference}
-Variable
-Variable
 ```
 
 Here, `$(test_var)` is expanded recursively, substituting an empty string for
@@ -274,8 +271,6 @@ but that breaks the `"$$test_var"` case:
 $ test_var='Variable $${reference}' make test
 Variable ${reference}
 Variable $${reference}
-Variable ${reference}
-Variable ${reference}
 ```
 
 A working solution would be to use the `escape` function on the unexpanded
@@ -283,69 +278,134 @@ variable value.
 Turns out, you can do just that using the `value` function in `make`.
 
 ```
-$ cat > Makefile
+$ cat Makefile
+# Prologue goes here...
+
 escape = $(subst ','\'',$(1))
 
 test_var ?= This is safe.
 test_var := $(value test_var)
 export test_var
 
-inner_var := Inner variable
-outer_var := Outer variable - $(inner_var) - $(test_var)
-
-echo_test_var := printf '%s\n' '$(call escape,$(test_var))'
-bash_test_var := bash -c '$(call escape,$(echo_test_var))'
-
-echo_outer_var := printf '%s\n' '$(call escape,$(outer_var))'
-
 .PHONY: test
 test:
 	@printf '%s\n' '$(call escape,$(test_var))'
 	@printf '%s\n' "$$test_var"
-	@bash -c '$(call escape,$(echo_test_var))'
-	@bash -c '$(call escape,$(bash_test_var))'
-	@printf '%s\n' '$(call escape,$(outer_var))'
-	@bash -c '$(call escape,$(echo_outer_var))'
 
 $ test_var="Quote '"' and variable ${reference}' make test
 Quote ' and variable ${reference}
 Quote ' and variable ${reference}
-Quote ' and variable ${reference}
-Quote ' and variable ${reference}
-Outer variable - Inner variable - Quote ' and variable ${reference}
-Outer variable - Inner variable - Quote ' and variable ${reference}
 ```
 
-One thing to note is that I couldn't find a way to prevent variable values from
-being expanded when [overriding variables] on the command line.
+This doesn't quite work though when [overriding variables] on the command line.
 For example, this doesn't work:
 
 [overriding variables]: https://www.gnu.org/software/make/manual/html_node/Overriding.html#Overriding
 
 ```
 $ make test test_var='Variable ${reference}'
-Makefile:23: warning: undefined variable 'reference'
+Makefile:16: warning: undefined variable 'reference'
 make: warning: undefined variable 'reference'
 Variable
 Variable
-Variable
-Variable
-Outer variable - Inner variable - Variable
-Outer variable - Inner variable - Variable
 ```
 
-One way to fix this is to escape the dollar sign using `make` syntax:
+This is because `make` ignores all assignments to `test_var` if it's overridden
+on the command line (including `test_var := $(value test_var)`).
+
+This can be fixed using the `override` directive for these cases only.
+A complete solution that works for seemingly all cases looks like something
+along these lines:
 
 ```
-$ make test test_var='Variable $${reference}'
-Variable ${reference}
-Variable ${reference}
-Variable ${reference}
-Variable ${reference}
-Outer variable - Inner variable - Variable ${reference}
-Outer variable - Inner variable - Variable ${reference}
+ifeq ($(origin test_var),environment)
+    test_var := $(value test_var)
+endif
+ifeq ($(origin test_var),environment override)
+    test_var := $(value test_var)
+endif
+ifeq ($(origin test_var),command line)
+    override test_var := $(value test_var)
+endif
 ```
 
-But that's messy.
-An easy workaround would be to set parameter values using your shell:
-`var_name=value make ...`.
+Here, we check where the value of `test_var` comes from using the `origin`
+function.
+If it was defined in the environment (the `environment` and `environment
+override` cases), its value is prevented from being expanded using the `value`
+function.
+If it was overridden on the command line (the `command line` case), the
+`override` directive is used so that the unexpanded value actually gets
+assigned.
+
+The snippet above can be generalized by defining a custom function that
+produces the required `make` code, and then calling `eval`.
+
+```
+define escape_arg
+ifeq ($$(origin $(1)),environment)
+    $(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),environment override)
+    $(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),command line)
+    override $(1) := $$(value $(1))
+endif
+endef
+
+test_var ?= This is safe.
+test_var2 ?= This is safe - 2.
+
+$(eval $(call escape_arg,test_var))
+$(eval $(call escape_arg,test_var2))
+```
+
+I couldn't find a case where the combination of `escape` and `escape_arg`
+wouldn't work.
+You can even safely use other variable as the default value of `test_var`, and
+it works:
+
+```
+> cat Makefile
+# Prologue goes here...
+
+escape = $(subst ','\'',$(1))
+
+define escape_arg
+ifeq ($$(origin $(1)),environment)
+    $(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),environment override)
+    $(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),command line)
+    override $(1) := $$(value $(1))
+endif
+endef
+
+simple_var := Simple value
+
+test_var ?= $(simple_var) in test_var
+$(eval $(call escape_arg,test_var))
+
+simple_var := New simple value
+composite_var := Composite value - $(simple_var) - $(test_var)
+
+.PHONY: test
+test:
+	@printf '%s\n' '$(call escape,$(test_var))'
+	@printf '%s\n' '$(call escape,$(composite_var))'
+
+> make test
+New simple value in test_var
+Composite value - New simple value - New simple value in test_var
+
+> make test test_var='Variable ${reference}'
+Variable ${reference}
+Composite value - New simple value - Variable ${reference}
+
+> test_var='Variable ${reference}' make test
+Variable ${reference}
+Composite value - New simple value - Variable ${reference}
+```
