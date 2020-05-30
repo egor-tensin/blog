@@ -87,8 +87,8 @@ jobs:
           diff <( echo "$expected_overridden" ) <( make -f escaping_env_vars.mk test test_var="Quote ' "'and variable ${reference}' )
     env:
       expected_default: |-
-        New simple value (in test_var)
-        Composite value - New simple value - New simple value (in test_var)
+        New simple value in test_var
+        Composite value - New simple value - New simple value in test_var
       expected_tricky: |-
         Quote ' and variable ${reference}
         Composite value - New simple value - Quote ' and variable ${reference}

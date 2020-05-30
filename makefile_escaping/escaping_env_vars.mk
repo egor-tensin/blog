@@ -7,22 +7,22 @@ SHELL := bash
 
 escape = $(subst ','\'',$(1))
 
-define escape_env
+define escape_arg
 ifeq ($$(origin $(1)),environment)
-$(1) := $$(value $(1))
+    $(1) := $$(value $(1))
 endif
 ifeq ($$(origin $(1)),environment override)
-$(1) := $$(value $(1))
+    $(1) := $$(value $(1))
 endif
 ifeq ($$(origin $(1)),command line)
-override $(1) := $$(value $(1))
+    override $(1) := $$(value $(1))
 endif
 endef
 
 simple_var := Simple value
 
-test_var ?= $(simple_var) (in test_var)
-$(eval $(call escape_env,test_var))
+test_var ?= $(simple_var) in test_var
+$(eval $(call escape_arg,test_var))
 
 simple_var := New simple value
 composite_var := Composite value - $(simple_var) - $(test_var)
