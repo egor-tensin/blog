@@ -93,5 +93,5 @@ jobs:
         Quote ' and variable ${reference}
         Quote ' and variable ${reference}
         Quote ' and variable ${reference}
-        Outer variable - Inner variable - Quote ' and variable ${reference}
-        Outer variable - Inner variable - Quote ' and variable ${reference}
+        Composite value - New simple value - Quote ' and variable ${reference}
+        Composite value - New simple value - Quote ' and variable ${reference}

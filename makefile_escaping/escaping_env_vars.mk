@@ -7,22 +7,38 @@ SHELL := bash
 
 escape = $(subst ','\'',$(1))
 
-test_var ?= This is safe.
-test_var := $(value test_var)
+define escape_arg
+ifeq ($$(origin $(1)),environment)
+$(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),environment override)
+$(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),command line)
+override $(1) := $$(value $(1))
+endif
+endef
+
+# Simple variable.
+simple_var := Simple value
+
+test_var ?= $(simple_var)
 export test_var
+
+$(eval $(call escape_arg,test_var))
+
+simple_var := New simple value
 
 # printf $test_var
 echo_test_var := printf '%s\n' '$(call escape,$(test_var))'
 # bash -c 'printf $test_var'
 bash_test_var := bash -c '$(call escape,$(echo_test_var))'
 
-# Simple variable.
-inner_var := Inner variable
-# Composite variable, includes both $inner_var and $test_var.
-outer_var := Outer variable - $(inner_var) - $(test_var)
+# Composite variable, includes both $simple_var and $test_var.
+composite_var := Composite value - $(simple_var) - $(test_var)
 
-# printf $outer_var
-echo_outer_var := printf '%s\n' '$(call escape,$(outer_var))'
+# printf $composite_var
+echo_composite_var := printf '%s\n' '$(call escape,$(composite_var))'
 
 .PHONY: test
 test:
@@ -30,5 +46,5 @@ test:
 	@printf '%s\n' "$$test_var"
 	@bash -c '$(call escape,$(echo_test_var))'
 	@bash -c '$(call escape,$(bash_test_var))'
-	@printf '%s\n' '$(call escape,$(outer_var))'
-	@bash -c '$(call escape,$(echo_outer_var))'
+	@printf '%s\n' '$(call escape,$(composite_var))'
+	@bash -c '$(call escape,$(echo_composite_var))'
