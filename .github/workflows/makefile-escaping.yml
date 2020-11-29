@@ -24,6 +24,7 @@ jobs:
         Same
         line?
         Same line?
+
   escaping_quotes:
     name: Escaping quotes
     runs-on: ubuntu-18.04
@@ -42,6 +43,7 @@ jobs:
         Includes ' quote
         bash -c 'bash -c '\''printf '\''\'\'''\''%s\n'\''\'\'''\'' '\''\'\'''\''Includes '\''\'\'''\''\'\''\'\'''\'''\''\'\'''\'' quote'\''\'\'''\'''\'''
         Includes ' quote
+
   shell_output:
     name: Shell output
     runs-on: ubuntu-18.04
@@ -70,6 +72,7 @@ jobs:
       expected_variable_reference: |-
         Variable ${reference}
         Composite value - Simple value - Variable ${reference}
+
   env_variables:
     name: Environment variables
     runs-on: ubuntu-18.04
