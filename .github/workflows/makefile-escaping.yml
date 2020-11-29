@@ -1,6 +1,9 @@
 name: Escaping characters in Makefile
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   quoting_arguments:
