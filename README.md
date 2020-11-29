@@ -1,6 +1,8 @@
 Egor's blog
 ===========
 
+[![Jekyll](https://github.com/egor-tensin/blog/workflows/Jekyll/badge.svg)](https://github.com/egor-tensin/blog/actions?query=workflow%3AJekyll)
+
 Egor's blog on programming.
 Hosted on [GitHub Pages] at https://egor-tensin.github.io/blog/.
 
