@@ -42,7 +42,6 @@ defaults:
 highlighter: rouge
 markdown: kramdown
 kramdown:
-  math_engine: null # Ignored by GitHub Pages, yay, how fun!
   syntax_highlighter_opts:
     span:
       disable: true

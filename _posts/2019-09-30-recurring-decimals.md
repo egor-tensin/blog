@@ -5,8 +5,6 @@ excerpt: >
 category: Math
 mathjax: true
 ---
-{% include common/mathjax_workaround.md %}
-
 First, let's determine that
 
 $$
