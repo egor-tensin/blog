@@ -107,7 +107,7 @@ All of the Debian packaging tools are tailored to the following use-case.
 packaging and is disconnected from the development.
 
 This disconnect means that maintaining the Debian packaging files in the
-`master` branch is inconvinient using the existing tools.
+`master` branch is inconvenient using the existing tools.
 At the very least, you should create a separate branch for doing packaging
 work.
 
@@ -161,7 +161,7 @@ Let's remove every other file for now:
     rm -f -- debian/*.ex debian/*.EX debian/README.* debian/*.docs
 
 You can study the exact format of the metadata files in the [Debian New
-Maintainers' Guide], but for now let's make keep it simple:
+Maintainers' Guide], but for now let's keep it simple:
 
 {% include snippets/section.html section_id='basic' %}
 
@@ -181,7 +181,7 @@ For example, if the package is supposed to be built using the standard
 If it's a Python package with setup.py, it'll use the Python package-building
 utilities, etc.
 We don't want any of that, we just want to copy test.sh to /usr/bin.
-It can be taked care of using the `dh_install` script.
+It can be taken care of using the `dh_install` script.
 While building the package, it'll get executed by `dh`, read the
 "debian/test.install" file and copy the files listed there to the specified
 directories.
@@ -207,9 +207,9 @@ For one, it's a binary package, and we need source packages for Launchpad to
 build itself.
 Second, it's unsigned, which is also a no-no.
 
-I'm actually not going to describe how to set up a GnuPG key and upload it to
-the Ubuntu keyserver (keyserver.ubuntu.com), but it's pretty straightforward
-once you know the basics of GnuPG key handling.
+I'm not going to describe how to set up a GnuPG key and upload it to the Ubuntu
+keyserver (keyserver.ubuntu.com), but it's pretty straightforward once you know
+the basics of GnuPG key handling.
 
 One disadvantage of the `dpkg-buildpackage` tool is that it creates a lot of
 files in the "debian" directory; their purpose is unclear to me.
