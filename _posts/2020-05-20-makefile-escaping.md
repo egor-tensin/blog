@@ -50,7 +50,7 @@ your-command arg1 arg2)'` with `'$(call escape,$(dangerous_variable))'` and
 on the command line), add the following lengthy snippet to prevent the values
 from being expanded:
 
-      define escape_arg
+      define noexpand
       ifeq ($$(origin $(1)),environment)
           $(1) := $$(value $(1))
       endif
@@ -67,9 +67,9 @@ environment variable contains `$` as in `Accidental $variable reference`) are
 not expanded if you use the following pattern in the Makefile:
 
       param1 ?= Default value
-      $(eval $(call escape_arg,param1))
+      $(eval $(call noexpand,param1))
 
-      $(eval $(call escape_arg,param2))
+      $(eval $(call noexpand,param2))
 
 Quoting arguments
 -----------------
@@ -342,7 +342,7 @@ The snippet above can be generalized by defining a custom function that
 produces the required `make` code, and then calling `eval`.
 
 ```
-define escape_arg
+define noexpand
 ifeq ($$(origin $(1)),environment)
     $(1) := $$(value $(1))
 endif
@@ -357,11 +357,11 @@ endef
 test_var ?= This is safe.
 test_var2 ?= This is safe - 2.
 
-$(eval $(call escape_arg,test_var))
-$(eval $(call escape_arg,test_var2))
+$(eval $(call noexpand,test_var))
+$(eval $(call noexpand,test_var2))
 ```
 
-I couldn't find a case where the combination of `escape` and `escape_arg`
+I couldn't find a case where the combination of `escape` and `noexpand`
 wouldn't work.
 You can even safely use other variable as the default value of `test_var`, and
 it works:
@@ -372,7 +372,7 @@ it works:
 
 escape = $(subst ','\'',$(1))
 
-define escape_arg
+define noexpand
 ifeq ($$(origin $(1)),environment)
     $(1) := $$(value $(1))
 endif
@@ -387,7 +387,7 @@ endef
 simple_var := Simple value
 
 test_var ?= $(simple_var) in test_var
-$(eval $(call escape_arg,test_var))
+$(eval $(call noexpand,test_var))
 
 simple_var := New simple value
 composite_var := Composite value - $(simple_var) - $(test_var)
