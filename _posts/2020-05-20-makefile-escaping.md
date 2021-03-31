@@ -17,7 +17,7 @@ this post:
 [Makefile style guide]: https://clarkgrubb.com/makefile-style-guide
 
 ```
-MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables --warn-undefined-variables
 .DEFAULT_GOAL := all
 .DELETE_ON_ERROR:
 .SUFFIXES:
