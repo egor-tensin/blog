@@ -1,4 +1,4 @@
-MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables --warn-undefined-variables
 .DEFAULT_GOAL := all
 .DELETE_ON_ERROR:
 .SUFFIXES:
