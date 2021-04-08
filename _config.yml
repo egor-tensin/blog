@@ -5,7 +5,6 @@ plugins:
   - jekyll-remote-theme
 
 exclude:
-  - .travis.yml
   - Gemfile
   - Gemfile.lock
   - LICENSE.txt
