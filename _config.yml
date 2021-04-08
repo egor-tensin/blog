@@ -50,7 +50,7 @@ paginate: 10
 # jekyll-github-metadata
 repository: egor-tensin/blog
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@b0b39768de6564e21f28c96fca34e01fa4602116
+remote_theme: egor-tensin/jekyll-theme@823883ffc36d5b9c02b64a545061c740364e7454
 
 # egor-tensin/jekyll-theme
 bootstrap_version: 3.3.7

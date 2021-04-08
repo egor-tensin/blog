@@ -5,8 +5,6 @@ excerpt: >
   Standard Library implementation shipped with Microsoft Visual Studio
   2012/2013.
 category: C++
-custom_css:
-  - syntax.css
 ---
 I've recently come across a nasty standard library bug in the implementation
 shipped with Microsoft Visual Studio 2012/2013.

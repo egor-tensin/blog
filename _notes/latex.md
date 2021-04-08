@@ -1,7 +1,5 @@
 ---
 title: Basic LaTeX document
-custom_css:
-  - syntax.css
 ---
 A more-or-less complete, but still very basic LaTeX document follows.
 

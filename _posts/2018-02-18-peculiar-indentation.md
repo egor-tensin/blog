@@ -4,8 +4,6 @@ excerpt: >
   An explanation for nasty `parse error`s I used to get for nested `do`
   blocks.
 category: Haskell
-custom_css:
-  - syntax.css
 ---
 I've fallen into a Haskell indentation pitfall.
 I think it must be common, so I'm describing it here.
