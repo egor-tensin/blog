@@ -1,21 +1,9 @@
 ---
 title: All posts
+layout: default
 groups:
   - navbar
 navbar_link: <span class="glyphicon glyphicon-th-list"></span>&nbsp;Posts
 navbar_priority: 2
 ---
-{% if site.categories.size != 0 %}
-  {% for category in site.categories %}
-    <h1><a class="category" href="{{ site.baseurl }}/categories/{{ category[0] | slugify: 'pretty' }}">{{ category[0] }}</a></h1>
-    <hr/>
-    <ul>
-      {% for post in category[1] %}
-        <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.date | date: "%Y-%m-%d" }} &mdash; {{ post.title }}</a></li>
-      {% endfor %}
-    </ul>
-  {% endfor %}
-{% else %}
-  <p>Sorry, no posts have been added yet.</p>
-  <hr/>
-{% endif %}
+{% include categories/categories.html %}

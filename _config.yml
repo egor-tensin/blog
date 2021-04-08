@@ -3,6 +3,7 @@ plugins:
   - jekyll-paginate
   - jekyll-github-metadata
   - jekyll-remote-theme
+  - jekyll-default-layout
 
 exclude:
   - Gemfile
@@ -20,23 +21,13 @@ defaults:
       path: ""
       type: pages
     values:
-      layout: default
+      layout: page
       navbar_priority: 999
-  - scope:
-      path: ""
-      type: posts
-    values:
-      layout: post
   - scope:
       path: ""
       type: notes
     values:
-      layout: note
-  - scope:
-      path: categories
-      type: pages
-    values:
-      layout: category
+      layout: page
 
 highlighter: rouge
 markdown: kramdown
@@ -50,7 +41,7 @@ paginate: 10
 # jekyll-github-metadata
 repository: egor-tensin/blog
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@823883ffc36d5b9c02b64a545061c740364e7454
+remote_theme: egor-tensin/jekyll-theme@3e22ef60fd2e89dc0817ff2c1a19178d91e23981
 
 # egor-tensin/jekyll-theme
 bootstrap_version: 3.3.7
