@@ -22,6 +22,11 @@ defaults:
       navbar_priority: 999
   - scope:
       path: ""
+      type: posts
+    values:
+      layout: post
+  - scope:
+      path: ""
       type: notes
     values:
       layout: page
@@ -37,7 +42,6 @@ kramdown:
 
 # Plugins
 plugins:
-  - jekyll-default-layout
   - jekyll-github-metadata
   - jekyll-paginate
   - jekyll-remote-theme
