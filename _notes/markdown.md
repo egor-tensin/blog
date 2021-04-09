@@ -1,7 +1,6 @@
 ---
 title: Markdown style guide
 ---
-
 * `diff`- and HTML-friendliness is valued over human-readability.
 * Every sentence starts on a new line ("semantic newlines").
 * Lines are at most 79 characters long, not counting neither the carriage
