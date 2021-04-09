@@ -6,12 +6,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  bundler:
+  build:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
         ruby-version: [2.5, 2.6]
-    name: 'Bundler / ${{ matrix.ruby-version }}'
+        version: [Gemfile, latest]
+        include:
+          - {version: Gemfile, gemfile: Gemfile}
+          - {version: latest, gemfile: .ci/Gemfile}
+    name: 'Build / ${{ matrix.ruby-version }} / ${{ matrix.version }}'
+    env:
+      BUNDLE_GEMFILE: '${{ matrix.gemfile }}'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -19,46 +25,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '${{ matrix.ruby-version }}'
-      - name: Install dependencies
-        run: bundle install --jobs=3 --retry=3
+          bundler-cache: true
       - name: jekyll build
         run: bundle exec jekyll build --config _config.yml,_config_dev.yml --drafts
-
-  github_pages:
-    runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        ruby-version: [2.5, 2.6]
-    name: 'github-pages / ${{ matrix.ruby-version }}'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '${{ matrix.ruby-version }}'
-      - name: Install dependencies
-        run: |
-          rm -f -- Gemfile Gemfile.lock
-          gem install github-pages
-      - name: jekyll build
-        run: jekyll build
-
-  verify:
-    runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        ruby-version: [2.5, 2.6]
-    name: 'Verify / ${{ matrix.ruby-version }}'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '${{ matrix.ruby-version }}'
-      - name: Install dependencies
-        run: bundle install --jobs=3 --retry=3
       - name: Check integrity
         run: |
           nohup bundle exec jekyll serve --config _config.yml,_config_dev.yml --drafts &
