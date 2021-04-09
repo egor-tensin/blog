@@ -4,7 +4,6 @@ baseurl: /blog
 exclude:
   - Gemfile
   - Gemfile.lock
-  - LICENSE.txt
   - README.md
 
 collections:
@@ -51,13 +50,15 @@ repository: egor-tensin/blog
 # jekyll-paginate
 paginate: 10
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@5017c2a67603996de88e6c89ce7e5248af2cd948
+remote_theme: egor-tensin/jekyll-theme@f5dec4b9690193aa0eba8c9705ae01a0238ecf56
 
 # Theme settings
 settings:
   project:
     name: Blog
     description: Egor's blog on programming
+    license: MIT License
+    license_file: LICENSE.txt
   author:
     name: Egor Tensin
     email: Egor.Tensin@gmail.com
