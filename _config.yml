@@ -15,23 +15,23 @@ collections:
 
 defaults:
   - scope:
-      path: ""
+      path: ''
       type: pages
     values:
       layout: page
       navbar_priority: 999
   - scope:
-      path: ""
+      path: ''
       type: posts
     values:
       layout: post
   - scope:
-      path: ""
+      path: ''
       type: notes
     values:
       layout: page
 
-excerpt_separator: ""
+excerpt_separator: ''
 
 highlighter: rouge
 markdown: kramdown
