@@ -10,7 +10,8 @@ exclude:
 collections:
   notes:
     output: true
-    sort_by: title # Doesn't work?
+    # Jekyll 4.0 or later:
+    #sort_by: title
 
 defaults:
   - scope:

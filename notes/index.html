@@ -8,6 +8,9 @@ navbar_priority: 3
 {% if site.notes.size != 0 %}
   <p>This is a complete list of notes I maintain for my personal usage.</p>
   <ul>
+    {% comment %}
+      Sorting can be done in _config.yml with Jekyll 4.0 or later.
+    {% endcomment %}
     {% assign note_list = site.notes | sort: 'title' %}
     {% for note in note_list %}
       <li><a href="{{ note.url | relative_url }}">{{ note.title }}</a></li>
