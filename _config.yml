@@ -1,9 +1,5 @@
 # Jekyll
-plugins:
-  - jekyll-paginate
-  - jekyll-github-metadata
-  - jekyll-remote-theme
-  - jekyll-default-layout
+baseurl: /blog
 
 exclude:
   - Gemfile
@@ -29,6 +25,8 @@ defaults:
     values:
       layout: page
 
+excerpt_separator: ""
+
 highlighter: rouge
 markdown: kramdown
 kramdown:
@@ -36,26 +34,32 @@ kramdown:
     span:
       disable: true
 
-# jekyll-paginate
-paginate: 10
+# Plugins
+plugins:
+  - jekyll-default-layout
+  - jekyll-github-metadata
+  - jekyll-paginate
+  - jekyll-remote-theme
+
 # jekyll-github-metadata
 repository: egor-tensin/blog
+# jekyll-paginate
+paginate: 10
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@3e22ef60fd2e89dc0817ff2c1a19178d91e23981
+remote_theme: egor-tensin/jekyll-theme@072200d740c6c711d6042af0fdff04bbd7fe6646
 
-# egor-tensin/jekyll-theme
-bootstrap_version: 3.3.7
-jquery_version: 1.12.4
-html5shiv_version: 3.7.3
-respond_version: 1.4.2
-
-excerpt_separator: ""
-minified_externals: true
-
-project:
-  name: Blog
-  description: Egor's blog on programming
-baseurl: /blog
-personal_info:
-  name: Egor Tensin
-  email: Egor.Tensin@gmail.com
+# Theme settings
+settings:
+  project:
+    name: Blog
+    description: Egor's blog on programming
+  author:
+    name: Egor Tensin
+    email: Egor.Tensin@gmail.com
+  3rdparty:
+    versions:
+      bootstrap: 3.3.7
+      jquery: 1.12.4
+      html5shiv: 3.7.3
+      respond: 1.4.2
+    minified: true

@@ -1,3 +1,5 @@
-minified_externals: false
+baseurl: ''
 
-baseurl: ""
+settings:
+  3rdparty:
+    minified: false
