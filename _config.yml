@@ -52,7 +52,7 @@ repository: egor-tensin/blog
 # jekyll-paginate
 paginate: 10
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@f5dec4b9690193aa0eba8c9705ae01a0238ecf56
+remote_theme: egor-tensin/jekyll-theme@6bf7c39c874004dd87d4c661018acf2285c8e135
 
 # Theme settings
 settings:
@@ -66,7 +66,7 @@ settings:
     email: Egor.Tensin@gmail.com
   3rdparty:
     versions:
-      bootstrap: 3.3.7
+      bootstrap: 3.4.1
       jquery: 1.12.4
       html5shiv: 3.7.3
       respond: 1.4.2
