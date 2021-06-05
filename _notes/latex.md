@@ -31,7 +31,7 @@ A more-or-less complete, but still very basic LaTeX document follows.
 \begin{document}
 
 Привет, \LaTeX!
-Ссылка на репозиторий: \href{https://github.com/egor-tensin/notes}{https://github.com/egor-tensin/notes}.
+Ссылка на репозиторий: \href{https://github.com/egor-tensin/blog}{https://github.com/egor-tensin/blog}.
 
 \end{document}
 ```
