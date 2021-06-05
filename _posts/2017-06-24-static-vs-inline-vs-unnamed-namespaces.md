@@ -133,7 +133,7 @@ No warnings/errors are emitted, making the situation truly disturbing.
 I tested this with GNU compiler version 5.4.0 and Microsoft compiler version
 19.00.24210.
 
-This behaviour can be easily fixed either by making these functions `static` or
+This behavior can be easily fixed either by making these functions `static` or
 by using unnamed namespaces (see below).
 
 ### Properties
@@ -144,7 +144,7 @@ translation units.
 address in every translation unit, its local static variables will be shared,
 etc.
 * Defining different `inline` functions with the same name in different
-translation units is undefined behaviour.
+translation units is undefined behavior.
 
 Two inline functions might be different even if they are the same textually.
 For example, they might reference two global variables which have the same
@@ -208,7 +208,7 @@ classes.
 * Similar to the `static` approach, each translation unit gets its own replica
 of a function/class, including their own local static variables, etc.
 * Defining different classes with the same name in different translation units
-(without utilizing unnamed namespaces) is undefined behaviour.
+(without utilizing unnamed namespaces) is undefined behavior.
 
 Conclusion
 ----------

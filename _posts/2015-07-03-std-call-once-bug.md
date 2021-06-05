@@ -128,7 +128,7 @@ Unfortunately, matters became a bit more complicated when I tried to introduce
 two singletons, one having a dependency on the other.
 I had `Logger`, like in the example above, and some kind of a "master"
 singleton (let's call it `Duke`).
-`Duke`'s constructor was complicated and time-consuming, and definetely
+`Duke`'s constructor was complicated and time-consuming, and definitely
 required some logging to be done.
 I thought that I could simply call `Logger::get_instance` inside `Duke`'s
 constructor, and everything looked fine at first glance.

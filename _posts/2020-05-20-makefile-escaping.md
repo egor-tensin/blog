@@ -2,7 +2,7 @@
 title: Escaping characters in Makefile
 excerpt: Making less error-prone.
 ---
-I'm a big sucker for irrelevant neatpicks like properly quoting arguments in
+I'm a big sucker for irrelevant nitpicks like properly quoting arguments in
 shell scripts.
 I've also recently started using GNU make as a substitute for one-line shell
 scripts (so instead of a bunch of scripts like build.sh, deploy.sh, test.sh I

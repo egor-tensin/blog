@@ -16,7 +16,7 @@ Additional sentences start there also.
 * Prefer reference-style links over inline links.
 Omit the second pair of brackets `[]` entirely where appropriate.
 For example, [Google] is preferred over both [Google](https://ya.ru) and
-[I'm feeeling lucky][google] (see [this document's source]).
+[I'm feeling lucky][google] (see [this document's source]).
 * First- and second-level headers are underlined with strings of `=` and `-`.
 The number of `=`/`-` signs must be equal to the number of characters in the
 header.

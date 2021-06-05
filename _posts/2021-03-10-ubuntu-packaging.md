@@ -35,7 +35,7 @@ At best, you'll learn how to build _binary_ packages, not suitable for
 publishing in a PPA (which only accept _source_ packages and builds the
 binaries itself).
 
-First, you need to realise that there're source packages and binary packages.
+First, you need to realize that there are source packages and binary packages.
 Binary packages are the .deb files that actually contain the software.
 A source package is, confusingly, multiple files, and you need to submit them
 all to Launchpad.
@@ -47,7 +47,7 @@ the new versions naturally via the package manager (`apt`).
 Canonical's Launchpad provides a very handy PPA (Personal Package Archive)
 service so that anyone can set up a repository.
 Users could then use `add-apt-repository ppa:...` and get the packages in a
-standard and convinient way.
+standard and convenient way.
 
 Tools
 -----
@@ -68,7 +68,7 @@ email address) from environment variables.
 You can put something like
 
     export DEBFULLNAME='John Doe'
-    epxort DEBEMAIL='John.Doe@example.com'
+    export DEBEMAIL='John.Doe@example.com'
 
 in your .bashrc to set them globally.
 

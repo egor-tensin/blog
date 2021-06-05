@@ -107,7 +107,7 @@ so that the `redis-server` process owns the /data directory and thus can write
 to it.
 
 If you want to preserve ./data ownership, Redis' image (and many others)
-explicitly accomodates for it by _not_ changing its owner if the container is
+explicitly accommodates for it by _not_ changing its owner if the container is
 run as anybody other than root.
 For example:
 
