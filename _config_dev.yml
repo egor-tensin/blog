@@ -1,5 +1,1 @@
 baseurl: ''
-
-settings:
-  3rdparty:
-    minified: false
