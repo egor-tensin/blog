@@ -23,9 +23,9 @@ in the project's root directory.
 
 To run a local web server, run
 
-    bundle exec jekyll serve --watch --drafts --config _config.yml,_config_dev.yml
+    bundle exec jekyll serve
 
-You can then review your changes at http://localhost:4000/.
+You can then review your changes at http://localhost:4000/blog/.
 
 Or you can use [jekyll-docker] to set up a development environment in Docker
 and not bother with installing everything locally.
@@ -43,7 +43,7 @@ Jekyll doesn't provide native support for generating a static website which can
 be browsed without running an instance of Jekyll's web server.
 One easy workaround is to `wget` the website and convert the links:
 
-    wget --no-verbose --recursive --convert-links --adjust-extension -- http://localhost:4000/
+    wget --no-verbose --recursive --convert-links --adjust-extension -- http://localhost:4000/blog/
 
 License
 -------
