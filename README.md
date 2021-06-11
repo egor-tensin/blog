@@ -1,8 +1,7 @@
-Egor's blog
-===========
+My blog
+=======
 
-Egor's blog on programming.
-Hosted at https://egor-tensin.github.io/blog/.
+My blog, hosted at https://egor-tensin.github.io/blog/.
 
 License
 -------
