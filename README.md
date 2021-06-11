@@ -1,10 +1,9 @@
-Egor's blog
-===========
+My blog
+=======
 
 [![Jekyll](https://github.com/egor-tensin/blog/actions/workflows/jekyll.yml/badge.svg)](https://github.com/egor-tensin/blog/actions/workflows/jekyll.yml)
 
-Egor's blog on programming.
-Hosted on [GitHub Pages] at https://egor-tensin.github.io/blog/.
+My blog, hosted on [GitHub Pages] at https://egor-tensin.github.io/blog/.
 
 [GitHub Pages]: https://pages.github.com
 
