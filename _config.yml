@@ -52,13 +52,12 @@ repository: egor-tensin/blog
 # jekyll-paginate
 paginate: 10
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@62e6ee584a458044de208236b77e55eb6552744c
+remote_theme: egor-tensin/jekyll-theme@f2f0517c9dc1aa0005563e59c8b730a31a2e04f7
 
 # Theme settings
 settings:
   project:
     name: Blog
-    description: Egor's blog on programming
     license: MIT License
     license_file: LICENSE.txt
   author:
