@@ -10,39 +10,29 @@ My blog, hosted on [GitHub Pages] at https://egor-tensin.github.io/blog/.
 Development
 -----------
 
-[Jekyll] is used to build a set of static HTML pages from a collection of
-templates and resources.
-[Bundler] is used to manage project's dependencies.
-Make sure you have the `bundler` gem installed; project dependencies can then
-be installed by executing
+This is a "static" website, generated using [Jekyll].
 
-    bundle install
+Make sure you have Ruby and [Bundler] set up.
+[GNU Make] is used for shortcuts.
 
-in the project's root directory.
-
-To run a local web server, run
-
-    bundle exec jekyll serve --drafts
-
-You can then review your changes at http://localhost:4000/blog/.
-
-Or you can use [jekyll-docker] to set up a development environment in Docker
-and not bother with installing everything locally.
+* Install dependencies by running `make deps`.
+* Build the website by running `make build`.
+* Launch a local web server by running `make serve`.
+Access the website at http://localhost:4000/blog/.
 
 [jekyll-theme] is used as a remote Jekyll theme.
 
 [Jekyll]: https://jekyllrb.com/
-[Bundler]: http://bundler.io/
-[jekyll-docker]: https://github.com/egor-tensin/jekyll-docker
+[Bundler]: https://bundler.io/
+[GNU Make]: https://www.gnu.org/software/make/
 [jekyll-theme]: https://github.com/egor-tensin/jekyll-theme
 
 ### Access via file://
 
 Jekyll doesn't provide native support for generating a static website which can
-be browsed without running an instance of Jekyll's web server.
-One easy workaround is to `wget` the website and convert the links:
-
-    wget --no-verbose --recursive --convert-links --adjust-extension -- http://localhost:4000/blog/
+be browsed without running a web server.
+One workaround is to `wget` the website (use `make wget`).
+The truly static version will be downloaded to the .wget/ directory.
 
 License
 -------
