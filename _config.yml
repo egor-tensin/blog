@@ -4,6 +4,7 @@ baseurl: /blog
 exclude:
   - Gemfile
   - Gemfile.lock
+  - Makefile
   - README.md
   - vendor/
 
