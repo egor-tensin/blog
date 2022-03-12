@@ -36,7 +36,7 @@ build:
 
 .PHONY: serve
 serve:
-	bundle exec jekyll serve --drafts
+	bundle exec jekyll serve --drafts --host 0.0.0.0
 
 URL := http://localhost:4000/blog/
 
