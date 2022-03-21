@@ -35,6 +35,9 @@ variable, but the same rules should apply for all similar `sh`-like shells.
 TL;DR
 -----
 
+Visit [this page]({{ site.baseurl }}{% link _notes/makefile.md %}) for an all-in-one Makefile.
+{: .alert .alert-info }
+
 * Put the prologue above at the top of your Makefile.
 * Quote command arguments in Makefiles using single quotes `'`.
 * Don't use `'` and `$` in stuff like file paths/environment variable values,
