@@ -11,13 +11,14 @@ get to have a single Makefile and can just run `make build`, `make deploy`,
 
 As a side note, there's an excellent [Makefile style guide] available on the
 web.
-I'm going to be using the prologue suggested in the guide in all Makefiles in
-this post:
+I'm going to be using a slightly modified prologue suggested in the guide in
+all Makefiles in this post:
 
 [Makefile style guide]: https://clarkgrubb.com/makefile-style-guide
 
 ```
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables --warn-undefined-variables
+unexport MAKEFLAGS
 .DEFAULT_GOAL := all
 .DELETE_ON_ERROR:
 .SUFFIXES:
