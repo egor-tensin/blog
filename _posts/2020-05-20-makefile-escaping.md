@@ -43,8 +43,7 @@ and you're pretty much good to go.
 
       escape = $(subst ','\'',$(1))
 
-  Use it to safeguard against single quote characters in your variables/function
-outputs.
+  It protects against quite characters in command arguments.
   You can then replace things like `'$(dangerous_variable)'` or `'$(shell
 your-command arg1 arg2)'` with `'$(call escape,$(dangerous_variable))'` and
 `'$(call escape,$(shell your-command arg1 arg2))'`.
@@ -64,14 +63,13 @@ from being expanded:
       endif
       endef
 
-  You can then be sure any accidental variables references (like if the
-environment variable contains `$` as in `Accidental $variable reference`) are
-not expanded if you use the following pattern in the Makefile:
+  Then `eval` the `noexpand` function output for every possibly overridden
+variable or a used environment variable:
 
-      param1 ?= Default value
-      $(eval $(call noexpand,param1))
+      param_with_default_value ?= Default value
+      $(eval $(call noexpand,param_with_default_value))
 
-      $(eval $(call noexpand,param2))
+      $(eval $(call noexpand,used_environment_variable))
 
 Quoting arguments
 -----------------
