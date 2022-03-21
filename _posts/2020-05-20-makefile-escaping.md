@@ -23,7 +23,7 @@ unexport MAKEFLAGS
 .DELETE_ON_ERROR:
 .SUFFIXES:
 SHELL := bash
-.SHELLFLAGS := -e -o pipefail -c
+.SHELLFLAGS := -eu -o pipefail -c
 ```
 
 `make` invokes a shell program to execute recipes.
