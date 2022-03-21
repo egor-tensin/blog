@@ -84,8 +84,7 @@ scripts.
 This is to prevent a single argument from being expanded into multiple
 arguments by the shell.
 
-```
-$ cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 test_var := Same line?
@@ -96,15 +95,19 @@ test:
 	@printf '%s\n' '$(test_var)'
 	@printf '%s\n' $$test_var
 	@printf '%s\n' "$$test_var"
+{% endcapture %}
 
-$ make test
+{% capture out2 %}
 Same
 line?
 Same line?
 Same
 line?
 Same line?
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd='make test' out=out2 %}
 
 This is quite often sufficient to write valid recipes.
 
@@ -119,28 +122,30 @@ What if `test_var` included a single quote `'`?
 In that case, even the quoted `printf` invocation would break because of the
 mismatch.
 
-```
-$ cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 test_var := Includes ' quote
 
 test:
 	printf '%s\n' '$(test_var)'
+{% endcapture %}
 
-$ make test
+{% capture out2 %}
 printf '%s\n' 'Includes ' quote'
 bash: -c: line 0: unexpected EOF while looking for matching `''
 make: *** [Makefile:11: test] Error 2
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd='make test' out=out2 %}
 
 One solution is to take advantage of how `bash` parses command arguments, and
 replace every quote `'` by `'\''`.
 This works because `bash` merges a string like `'Includes '\'' quote'` into
 `Includes ' quote`.
 
-```
-$ cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 escape = $(subst ','\'',$(1))
@@ -149,11 +154,15 @@ test_var := Includes ' quote
 
 test:
 	printf '%s\n' '$(call escape,$(test_var))'
+{% endcapture %}
 
-$ make test
+{% capture out2 %}
 printf '%s\n' 'Includes '\'' quote'
 Includes ' quote
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd='make test' out=out2 %}
 
 Surprisingly, this works even in much more complicated cases.
 You can have a recipe that executes a command that takes a whole other command
@@ -161,8 +170,7 @@ You can have a recipe that executes a command that takes a whole other command
 I guess the most common use case is doing something like `ssh 'rm -rf
 $(junk_dir)'`, but I'll use nested `bash` calls instead for simplicity.
 
-```
-$ cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 escape = $(subst ','\'',$(1))
@@ -176,15 +184,19 @@ test:
 	printf '%s\n' '$(call escape,$(test_var))'
 	bash -c '$(call escape,$(echo_test_var))'
 	bash -c '$(call escape,$(bash_test_var))'
+{% endcapture %}
 
-$ make test
+{% capture out2 %}
 printf '%s\n' 'Includes '\'' quote'
 Includes ' quote
 bash -c 'printf '\''%s\n'\'' '\''Includes '\''\'\'''\'' quote'\'''
 Includes ' quote
 bash -c 'bash -c '\''printf '\''\'\'''\''%s\n'\''\'\'''\'' '\''\'\'''\''Includes '\''\'\'''\''\'\''\'\'''\'''\''\'\'''\'' quote'\''\'\'''\'''\'''
 Includes ' quote
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd='make test' out=out2 %}
 
 That's somewhat insane, but it works.
 
@@ -196,8 +208,7 @@ outside world in a Makefile (the other being environment variables).
 This little `escape` function we've defined is actually sufficient to deal with
 the output of the `shell` function safely.
 
-```
-$ cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 escape = $(subst ','\'',$(1))
@@ -211,19 +222,42 @@ composite_var := Composite value - $(simple_var) - $(cwd)
 test:
 	@printf '%s\n' '$(call escape,$(cwd))'
 	@printf '%s\n' '$(call escape,$(composite_var))'
+{% endcapture %}
 
-$ ( mkdir -p -- "Includes ' quote" && cd -- "Includes ' quote" && make -f ../Makefile test ; )
+{% capture cmd2 %}
+mkdir "Includes ' quote" && \
+    cd "Includes ' quote" && \
+    make -f ../Makefile test
+{% endcapture %}
+{% capture out2 %}
 Includes ' quote
 Composite value - Simple value - Includes ' quote
+{% endcapture %}
 
-$ ( mkdir -p -- 'Maybe a comment #' && cd -- 'Maybe a comment #' && make -f ../Makefile test ; )
+{% capture cmd3 %}
+mkdir 'Maybe a comment #' && \
+    cd 'Maybe a comment #' && \
+    make -f ../Makefile test
+{% endcapture %}
+{% capture out3 %}
 Maybe a comment #
 Composite value - Simple value - Maybe a comment #
+{% endcapture %}
 
-$ ( mkdir -p -- 'Variable ${reference}' && cd -- 'Variable ${reference}' && make -f ../Makefile test ; )
+{% capture cmd4 %}
+mkdir 'Variable ${reference}' && \
+    cd 'Variable ${reference}' && \
+    make -f ../Makefile test
+{% endcapture %}
+{% capture out4 %}
 Variable ${reference}
 Composite value - Simple value - Variable ${reference}
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd=cmd2 out=out2 %}
+{% include shell.html cmd=cmd3 out=out3 %}
+{% include shell.html cmd=cmd4 out=out4 %}
 
 Environment variables
 ---------------------
@@ -246,9 +280,7 @@ signs `$`.
 expanded recursively either when defined (for `:=` assignments) or when used
 (in all other cases, including `?=`).
 
-
-```
-$ cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 escape = $(subst ','\'',$(1))
@@ -260,30 +292,40 @@ export test_var
 test:
 	@printf '%s\n' '$(call escape,$(test_var))'
 	@printf '%s\n' "$$test_var"
+{% endcapture %}
 
-$ test_var='Variable ${reference}' make test
+{% capture cmd2 %}
+test_var='Variable ${reference}' make test
+{% endcapture %}
+{% capture out2 %}
 Makefile:15: warning: undefined variable 'reference'
 Variable
 Variable ${reference}
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd=cmd2 out=out2 %}
 
 Here, `$(test_var)` is expanded recursively, substituting an empty string for
 the `${reference}` part.
 One attempt to solve this is to escape the dollar sign in the variable value,
 but that breaks the `"$$test_var"` case:
 
-```
-$ test_var='Variable $${reference}' make test
+{% capture cmd1 %}
+test_var='Variable $${reference}' make test
+{% endcapture %}
+{% capture out1 %}
 Variable ${reference}
 Variable $${reference}
-```
+{% endcapture %}
+
+{% include shell.html cmd=cmd1 out=out1 %}
 
 A working solution would be to use the `escape` function on the unexpanded
 variable value.
 Turns out, you can do just that using the `value` function in `make`.
 
-```
-$ cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 escape = $(subst ','\'',$(1))
@@ -296,24 +338,35 @@ export test_var
 test:
 	@printf '%s\n' '$(call escape,$(test_var))'
 	@printf '%s\n' "$$test_var"
+{% endcapture %}
 
-$ test_var="Quote '"' and variable ${reference}' make test
+{% capture cmd2 %}
+test_var="Quote '"' and variable ${reference}' make test
+{% endcapture %}
+{% capture out2 %}
 Quote ' and variable ${reference}
 Quote ' and variable ${reference}
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd=cmd2 out=out2 %}
 
 This doesn't quite work though when [overriding variables] on the command line.
 For example, this doesn't work:
 
 [overriding variables]: https://www.gnu.org/software/make/manual/html_node/Overriding.html#Overriding
 
-```
-$ make test test_var='Variable ${reference}'
+{% capture cmd1 %}
+make test test_var='Variable ${reference}'
+{% endcapture %}
+{% capture out1 %}
 Makefile:16: warning: undefined variable 'reference'
 make: warning: undefined variable 'reference'
 Variable
 Variable
-```
+{% endcapture %}
+
+{% include shell.html cmd=cmd1 out=out1 %}
 
 This is because `make` ignores all assignments to `test_var` if it's overridden
 on the command line (including `test_var := $(value test_var)`).
@@ -371,8 +424,7 @@ wouldn't work.
 You can even safely use other variable as the default value of `test_var`, and
 it works:
 
-```
-> cat Makefile
+{% capture out1 %}
 # Prologue goes here...
 
 escape = $(subst ','\'',$(1))
@@ -401,16 +453,30 @@ composite_var := Composite value - $(simple_var) - $(test_var)
 test:
 	@printf '%s\n' '$(call escape,$(test_var))'
 	@printf '%s\n' '$(call escape,$(composite_var))'
+{% endcapture %}
 
-> make test
+{% capture out2 %}
 New simple value in test_var
 Composite value - New simple value - New simple value in test_var
+{% endcapture %}
 
-> make test test_var='Variable ${reference}'
+{% capture cmd3 %}
+make test test_var='Variable ${reference}'
+{% endcapture %}
+{% capture out3 %}
 Variable ${reference}
 Composite value - New simple value - Variable ${reference}
+{% endcapture %}
 
-> test_var='Variable ${reference}' make test
+{% capture cmd4 %}
+test_var='Variable ${reference}' make test
+{% endcapture %}
+{% capture out4 %}
 Variable ${reference}
 Composite value - New simple value - Variable ${reference}
-```
+{% endcapture %}
+
+{% include shell.html cmd='cat Makefile' out=out1 %}
+{% include shell.html cmd='make test' out=out2 %}
+{% include shell.html cmd=cmd3 out=out3 %}
+{% include shell.html cmd=cmd4 out=out4 %}

@@ -14,13 +14,21 @@ after being mounted in the container.
 
 Case in point:
 
-    docker run -it --rm -v "$( pwd ):/data" alpine touch /data/test.txt
+{% capture cmd1 %}
+docker run -it --rm -v "$( pwd ):/data" alpine touch /data/test.txt
+{% endcapture %}
+
+{% include shell.html cmd=cmd1 %}
 
 would create file ./test.txt owned by root:root.
 
 You can fix that by using the `--user` parameter:
 
-    docker run -it --rm -v "$( pwd ):/data" --user "$( id -u ):$( id -g )" alpine touch /data/test.txt
+{% capture cmd1 %}
+docker run -it --rm -v "$( pwd ):/data" --user "$( id -u ):$( id -g )" alpine touch /data/test.txt
+{% endcapture %}
+
+{% include shell.html cmd=cmd1 %}
 
 That would create file ./test.txt owned by the current user (if the current
 working directory is writable by the current user, of course).
@@ -40,36 +48,54 @@ How do you run the service as regular user though?
 It's tempting to use the `USER` directive in the Dockerfile, but that can be
 overridden by `--user`:
 
-    $ cat Dockerfile
-    FROM alpine
-    
-    RUN addgroup --gid 9099 test-group && \
-        adduser \
-            --disabled-password \
-            --gecos '' \
-            --home /home/test-user \
-            --ingroup test-group \
-            --uid 9099 \
-            test-user
-    
-    RUN touch /root.txt
-    USER test-user:test-group
-    RUN touch /home/test-user/test-user.txt
-    
-    CMD id && stat -c '%U %G' /root.txt && stat -c '%U %G' /home/test-user/test-user.txt
+{% capture cmd1 %}
+cat Dockerfile
+{% endcapture %}
+{% capture out1 %}
+FROM alpine
 
-    $ docker build -t id .
-    ...
+RUN addgroup --gid 9099 test-group && \
+    adduser \
+        --disabled-password \
+        --gecos '' \
+        --home /home/test-user \
+        --ingroup test-group \
+        --uid 9099 \
+        test-user
 
-    $ docker run -it --rm id
-    uid=9099(test-user) gid=9099(test-group)
-    root root
-    test-user test-group
+RUN touch /root.txt
+USER test-user:test-group
+RUN touch /home/test-user/test-user.txt
 
-    $ docker run -it --rm --user root id
-    uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel),11(floppy),20(dialout),26(tape),27(video)
-    root root
-    test-user test-group
+CMD id && stat -c '%U %G' /root.txt && stat -c '%U %G' /home/test-user/test-user.txt
+{% endcapture %}
+
+{% capture cmd2 %}
+docker build -t id .
+{% endcapture %}
+
+{% capture cmd3 %}
+docker run -it --rm id
+{% endcapture %}
+{% capture out3 %}
+uid=9099(test-user) gid=9099(test-group)
+root root
+test-user test-group
+{% endcapture %}
+
+{% capture cmd4 %}
+docker run -it --rm --user root id
+{% endcapture %}
+{% capture out4 %}
+uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel),11(floppy),20(dialout),26(tape),27(video)
+root root
+test-user test-group
+{% endcapture %}
+
+{% include shell.html cmd=cmd1 out=out1 %}
+{% include shell.html cmd=cmd2 %}
+{% include shell.html cmd=cmd3 out=out3 %}
+{% include shell.html cmd=cmd4 out=out4 %}
 
 I suppose that's the reason why many popular images override ENTRYPOINT, using
 a custom script (and `gosu`, which is basically `sudo`, I think) to forcefully
@@ -89,16 +115,32 @@ For example, let's try to map ./data to /data inside a Redis container (this
 assumes ./data doesn't exist and you're running as regular user with UID 1000;
 press Ctrl+C to stop Redis):
 
-    $ mkdir data
+{% capture cmd1 %}
+mkdir data
+{% endcapture %}
 
-    $ stat -c '%u' data
-    1000
+{% capture cmd2 %}
+stat -c '%u' data
+{% endcapture %}
+{% capture out2 %}
+1000
+{% endcapture %}
 
-    $ docker run -it --rm --name redis -v "$( pwd )/data:/data" redis:6.0
-    ...
+{% capture cmd3 %}
+docker run -it --rm --name redis -v "$( pwd )/data:/data" redis:6.0
+{% endcapture %}
 
-    $ stat -c '%u' data
-    999
+{% capture cmd4 %}
+stat -c '%u' data
+{% endcapture %}
+{% capture out4 %}
+999
+{% endcapture %}
+
+{% include shell.html cmd=cmd1 %}
+{% include shell.html cmd=cmd2 out=out2 %}
+{% include shell.html cmd=cmd3 %}
+{% include shell.html cmd=cmd4 out=out4 %}
 
 As you can see, ./data changed its owner from user with UID 1000 (the host
 user) to user with UID 999 (the `redis` user inside the container).
@@ -111,16 +153,32 @@ explicitly accommodates for it by _not_ changing its owner if the container is
 run as anybody other than root.
 For example:
 
-    $ mkdir data
+{% capture cmd1 %}
+mkdir data
+{% endcapture %}
 
-    $ stat -c '%u' data
-    1000
+{% capture cmd2 %}
+stat -c '%u' data
+{% endcapture %}
+{% capture out2 %}
+1000
+{% endcapture %}
 
-    $ docker run -it --rm --name redis -v "$( pwd )/data:/data" --user "$( id -u ):$( id -g )" redis:6.0
-    ...
+{% capture cmd3 %}
+docker run -it --rm --name redis -v "$( pwd )/data:/data" --user "$( id -u ):$( id -g )" redis:6.0
+{% endcapture %}
 
-    $ stat -c '%u' data
-    1000
+{% capture cmd4 %}
+stat -c '%u' data
+{% endcapture %}
+{% capture out4 %}
+1000
+{% endcapture %}
+
+{% include shell.html cmd=cmd1 %}
+{% include shell.html cmd=cmd2 out=out2 %}
+{% include shell.html cmd=cmd3 %}
+{% include shell.html cmd=cmd4 out=out4 %}
 
 Sometimes `--user` is not enough though.
 That specified user is almost certainly missing from container's /etc/passwd,

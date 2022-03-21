@@ -27,8 +27,6 @@ auxiliary files, etc.
 Windows' `cd`, for example, simply prints the current working directory;
 Cygwin's `pwd` serves the same purpose.
 `cat` is used to display files.
-Windows' command prompts are denoted with `>`s at the beginning of each line;
-Cygwin's &mdash; with `$`s.
 
 Visual Studio
 -------------
@@ -42,41 +40,43 @@ file names (the "gd" suffix).
 
 ### x86
 
-```
-> cd
+{% capture out1 %}
 D:\workspace\third-party\boost_1_61_0\msvc
+{% endcapture %}
 
-> bootstrap
-...
-
-> b2 --stagedir=stage\x86  ^
+{% capture cmd3 %}
+b2 --stagedir=stage\x86    ^
     runtime-link=static    ^
     --with-filesystem      ^
     --with-program_options ^
     ...
-...
-```
+{% endcapture %}
+
+{% include shell.html cmd='cd' out=out1 %}
+{% include shell.html cmd='bootstrap' %}
+{% include shell.html cmd=cmd3 %}
 
 ### x64
 
 The only important difference is that you have to pass `address-model=64` to
 `b2` (notice also the different "staging" directory).
 
-```
-> cd
+{% capture out1 %}
 D:\workspace\third-party\boost_1_61_0\msvc
+{% endcapture %}
 
-> bootstrap
-...
-
-> b2 --stagedir=stage\x64  ^
+{% capture cmd3 %}
+b2 --stagedir=stage\x64    ^
     runtime-link=static    ^
     address-model=64       ^
     --with-filesystem      ^
     --with-program_options ^
     ...
-...
-```
+{% endcapture %}
+
+{% include shell.html cmd='cd' out=out1 %}
+{% include shell.html cmd='bootstrap' %}
+{% include shell.html cmd=cmd3 %}
 
 Cygwin + MinGW-w64
 ------------------
@@ -100,17 +100,16 @@ on the target architecture.
 
 ### x86
 
-```
-$ pwd
+{% capture out1 %}
 /cygdrive/d/workspace/third-party/boost_1_61_0/mingw
+{% endcapture %}
 
-$ ./bootstrap.sh
-...
-
-$ cat user-config-x86.jam
+{% capture out3 %}
 using gcc : : i686-w64-mingw32-g++ ;
+{% endcapture %}
 
-$ ./b2 toolset=gcc-mingw              \
+{% capture cmd4 %}
+./b2 toolset=gcc-mingw                \
     target-os=windows                 \
     link=static                       \
     variant=debug                     \
@@ -119,8 +118,12 @@ $ ./b2 toolset=gcc-mingw              \
     --with-filesystem                 \
     --with-program_options            \
     ...
-...
-```
+{% endcapture %}
+
+{% include shell.html cmd='pwd' out=out1 %}
+{% include shell.html cmd='./bootstrap.sh' %}
+{% include shell.html cmd='cat user-config-x86.jam' out=out3 %}
+{% include shell.html cmd=cmd4 %}
 
 The "user" configuration file above stopped working at some point; not sure as
 to who's to blame, Cygwin or Boost.
@@ -140,17 +143,16 @@ instead of `i686-w64-mingw32-g++`.
 Again, as in the example for Visual Studio, a different "staging" directory
 needs to be specified using the `--stagedir` parameter.
 
-```
-$ cd
+{% capture out1 %}
 /cygdrive/d/workspace/third-party/boost_1_61_0/mingw
+{% endcapture %}
 
-$ ./bootstrap.sh
-...
-
-$ cat user-config-x64.jam
+{% capture out3 %}
 using gcc : : x86_64-w64-mingw32-g++ ;
+{% endcapture %}
 
-$ ./b2 toolset=gcc-mingw              \
+{% capture cmd4 %}
+./b2 toolset=gcc-mingw                \
     address-model=64                  \
     target-os=windows                 \
     link=static                       \
@@ -160,8 +162,12 @@ $ ./b2 toolset=gcc-mingw              \
     --with-filesystem                 \
     --with-program_options            \
     ...
-...
-```
+{% endcapture %}
+
+{% include shell.html cmd='pwd' out=out1 %}
+{% include shell.html cmd='./bootstrap.sh' %}
+{% include shell.html cmd='cat user-config-x64.jam' out=out3 %}
+{% include shell.html cmd=cmd4 %}
 
 The "user" configuration file above stopped working at some point; not sure as
 to who's to blame, Cygwin or Boost.
@@ -180,31 +186,39 @@ You may want to adjust the paths.
 
 #### x86
 
-```
-> cd
-D:\workspace\build\test_project\msvc\x64
+{% capture out1 %}
+D:\workspace\build\test_project\msvc\x86
+{% endcapture %}
 
-> cmake -G "Visual Studio 14 2015" ^
-    -D BOOST_ROOT=D:\workspace\third-party\boost_1_61_0\msvc                     ^
+{% capture cmd2 %}
+cmake -G "Visual Studio 14 2015" ^
+    -D BOOST_ROOT=D:\workspace\third-party\boost_1_61_0\msvc ^
     -D BOOST_LIBRARYDIR=D:\workspace\third-party\boost_1_61_0\msvc\stage\x86\lib ^
-    -D Boost_USE_STATIC_LIBS=ON    ^
+    -D Boost_USE_STATIC_LIBS=ON ^
     -D Boost_USE_STATIC_RUNTIME=ON ^
     ...
-```
+{% endcapture %}
+
+{% include shell.html cmd='cd' out=out1 %}
+{% include shell.html cmd=cmd2 %}
 
 #### x64
 
-```
-> cd
-D:\workspace\build\test_project\msvc\x86
+{% capture out1 %}
+D:\workspace\build\test_project\msvc\x64
+{% endcapture %}
 
-> cmake -G "Visual Studio 14 2015 Win64" ^
-    -D BOOST_ROOT=D:\workspace\third-party\boost_1_61_0\msvc                     ^
+{% capture cmd2 %}
+cmake -G "Visual Studio 14 2015 Win64" ^
+    -D BOOST_ROOT=D:\workspace\third-party\boost_1_61_0\msvc ^
     -D BOOST_LIBRARYDIR=D:\workspace\third-party\boost_1_61_0\msvc\stage\x64\lib ^
-    -D Boost_USE_STATIC_LIBS=ON          ^
-    -D Boost_USE_STATIC_RUNTIME=ON       ^
+    -D Boost_USE_STATIC_LIBS=ON ^
+    -D Boost_USE_STATIC_RUNTIME=ON ^
     ...
-```
+{% endcapture %}
+
+{% include shell.html cmd='cd' out=out1 %}
+{% include shell.html cmd=cmd2 %}
 
 ### Cygwin & MinGW-w64
 
@@ -215,11 +229,12 @@ You may also want to adjust the paths.
 
 #### x86
 
-```
-$ pwd
+{% capture out1 %}
 /cygdrive/d/workspace/build/test_project/mingw/x86/debug
+{% endcapture %}
 
-$ cmake -G "Unix Makefiles"                    \
+{% capture cmd2 %}
+cmake -G "Unix Makefiles"                      \
     -D CMAKE_BUILD_TYPE=Debug                  \
     -D CMAKE_C_COMPILER=i686-w64-mingw32-gcc   \
     -D CMAKE_CXX_COMPILER=i686-w64-mingw32-g++ \
@@ -227,15 +242,19 @@ $ cmake -G "Unix Makefiles"                    \
     -D BOOST_LIBRARYDIR=/cygdrive/d/workspace/third-party/boost_1_61_0/mingw/stage/x86/debug/lib \
     -D Boost_USE_STATIC_LIBS=ON                \
     ...
-```
+{% endcapture %}
+
+{% include shell.html cmd='pwd' out=out1 %}
+{% include shell.html cmd=cmd2 %}
 
 #### x64
 
-```
-$ pwd
+{% capture out1 %}
 /cygdrive/d/workspace/build/test_project/mingw/x64/debug
+{% endcapture %}
 
-$ cmake -G "Unix Makefiles"                      \
+{% capture cmd2 %}
+cmake -G "Unix Makefiles"                        \
     -D CMAKE_BUILD_TYPE=Debug                    \
     -D CMAKE_C_COMPILER=x86_64-w64-mingw32-gcc   \
     -D CMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++ \
@@ -243,4 +262,7 @@ $ cmake -G "Unix Makefiles"                      \
     -D BOOST_LIBRARYDIR=/cygdrive/d/workspace/third-party/boost_1_61_0/mingw/stage/x64/debug/lib \
     -D Boost_USE_STATIC_LIBS=ON                  \
     ...
-```
+{% endcapture %}
+
+{% include shell.html cmd='pwd' out=out1 %}
+{% include shell.html cmd=cmd2 %}
