@@ -35,6 +35,7 @@ variable, but the same rules should apply for all similar `sh`-like shells.
 TL;DR
 -----
 
+* Put the prologue above at the top of your Makefile.
 * Quote command arguments in Makefiles using single quotes `'`.
 * Don't use `'` and `$` in stuff like file paths/environment variable values,
 and you're pretty much good to go.
