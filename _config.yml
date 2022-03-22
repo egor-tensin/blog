@@ -53,7 +53,7 @@ repository: egor-tensin/blog
 # jekyll-paginate
 paginate: 10
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@5b06184881d76324ebd195f72e69b8a501d73927
+remote_theme: egor-tensin/jekyll-theme@f20a852b276a3f8e65b3b0dd797c90e0374b2e42
 
 # Theme settings
 settings:
