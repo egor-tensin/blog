@@ -188,7 +188,7 @@ All of that could cause problems with some applications.
 One scenario I had to deal with is making an image that bundles all the gems
 (and a specific Ruby version) for my Ruby web application.
 That application shouldn't be run as root, but it must be able to pick up code
-changes on the fly, and I should be able `docker exec` into the container,
+changes on the fly, and I should be able to `docker exec` into the container,
 update the dependencies (along with Gemfile[.lock], and those changes should be
 reflected on the host without messing up file metadata), and restart the app.
 It's quite easy to install the dependencies in the Dockerfile, but they (along
