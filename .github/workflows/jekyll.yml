@@ -31,4 +31,4 @@ jobs:
       - name: Check integrity
         run: |
           nohup make serve &
-          sleep 3 && make wget
+          sleep 5 && make wget
