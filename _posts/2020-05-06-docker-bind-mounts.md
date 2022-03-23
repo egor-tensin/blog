@@ -18,7 +18,7 @@ Case in point:
 docker run -it --rm -v "$( pwd ):/data" alpine touch /data/test.txt
 {% endcapture %}
 
-{% include shell.html cmd=cmd1 %}
+{% include jekyll-theme/shell.html cmd=cmd1 %}
 
 would create file ./test.txt owned by root:root.
 
@@ -28,7 +28,7 @@ You can fix that by using the `--user` parameter:
 docker run -it --rm -v "$( pwd ):/data" --user "$( id -u ):$( id -g )" alpine touch /data/test.txt
 {% endcapture %}
 
-{% include shell.html cmd=cmd1 %}
+{% include jekyll-theme/shell.html cmd=cmd1 %}
 
 That would create file ./test.txt owned by the current user (if the current
 working directory is writable by the current user, of course).
@@ -92,10 +92,10 @@ root root
 test-user test-group
 {% endcapture %}
 
-{% include shell.html cmd=cmd1 out=out1 %}
-{% include shell.html cmd=cmd2 %}
-{% include shell.html cmd=cmd3 out=out3 %}
-{% include shell.html cmd=cmd4 out=out4 %}
+{% include jekyll-theme/shell.html cmd=cmd1 out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 %}
+{% include jekyll-theme/shell.html cmd=cmd3 out=out3 %}
+{% include jekyll-theme/shell.html cmd=cmd4 out=out4 %}
 
 I suppose that's the reason why many popular images override ENTRYPOINT, using
 a custom script (and `gosu`, which is basically `sudo`, I think) to forcefully
@@ -137,10 +137,10 @@ stat -c '%u' data
 999
 {% endcapture %}
 
-{% include shell.html cmd=cmd1 %}
-{% include shell.html cmd=cmd2 out=out2 %}
-{% include shell.html cmd=cmd3 %}
-{% include shell.html cmd=cmd4 out=out4 %}
+{% include jekyll-theme/shell.html cmd=cmd1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 out=out2 %}
+{% include jekyll-theme/shell.html cmd=cmd3 %}
+{% include jekyll-theme/shell.html cmd=cmd4 out=out4 %}
 
 As you can see, ./data changed its owner from user with UID 1000 (the host
 user) to user with UID 999 (the `redis` user inside the container).
@@ -175,10 +175,10 @@ stat -c '%u' data
 1000
 {% endcapture %}
 
-{% include shell.html cmd=cmd1 %}
-{% include shell.html cmd=cmd2 out=out2 %}
-{% include shell.html cmd=cmd3 %}
-{% include shell.html cmd=cmd4 out=out4 %}
+{% include jekyll-theme/shell.html cmd=cmd1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 out=out2 %}
+{% include jekyll-theme/shell.html cmd=cmd3 %}
+{% include jekyll-theme/shell.html cmd=cmd4 out=out4 %}
 
 Sometimes `--user` is not enough though.
 That specified user is almost certainly missing from container's /etc/passwd,

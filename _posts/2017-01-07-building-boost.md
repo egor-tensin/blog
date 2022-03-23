@@ -52,9 +52,9 @@ b2 --stagedir=stage\x86    ^
     ...
 {% endcapture %}
 
-{% include shell.html cmd='cd' out=out1 %}
-{% include shell.html cmd='bootstrap' %}
-{% include shell.html cmd=cmd3 %}
+{% include jekyll-theme/shell.html cmd='cd' out=out1 %}
+{% include jekyll-theme/shell.html cmd='bootstrap' %}
+{% include jekyll-theme/shell.html cmd=cmd3 %}
 
 ### x64
 
@@ -74,9 +74,9 @@ b2 --stagedir=stage\x64    ^
     ...
 {% endcapture %}
 
-{% include shell.html cmd='cd' out=out1 %}
-{% include shell.html cmd='bootstrap' %}
-{% include shell.html cmd=cmd3 %}
+{% include jekyll-theme/shell.html cmd='cd' out=out1 %}
+{% include jekyll-theme/shell.html cmd='bootstrap' %}
+{% include jekyll-theme/shell.html cmd=cmd3 %}
 
 Cygwin + MinGW-w64
 ------------------
@@ -120,10 +120,10 @@ using gcc : : i686-w64-mingw32-g++ ;
     ...
 {% endcapture %}
 
-{% include shell.html cmd='pwd' out=out1 %}
-{% include shell.html cmd='./bootstrap.sh' %}
-{% include shell.html cmd='cat user-config-x86.jam' out=out3 %}
-{% include shell.html cmd=cmd4 %}
+{% include jekyll-theme/shell.html cmd='pwd' out=out1 %}
+{% include jekyll-theme/shell.html cmd='./bootstrap.sh' %}
+{% include jekyll-theme/shell.html cmd='cat user-config-x86.jam' out=out3 %}
+{% include jekyll-theme/shell.html cmd=cmd4 %}
 
 The "user" configuration file above stopped working at some point; not sure as
 to who's to blame, Cygwin or Boost.
@@ -164,10 +164,10 @@ using gcc : : x86_64-w64-mingw32-g++ ;
     ...
 {% endcapture %}
 
-{% include shell.html cmd='pwd' out=out1 %}
-{% include shell.html cmd='./bootstrap.sh' %}
-{% include shell.html cmd='cat user-config-x64.jam' out=out3 %}
-{% include shell.html cmd=cmd4 %}
+{% include jekyll-theme/shell.html cmd='pwd' out=out1 %}
+{% include jekyll-theme/shell.html cmd='./bootstrap.sh' %}
+{% include jekyll-theme/shell.html cmd='cat user-config-x64.jam' out=out3 %}
+{% include jekyll-theme/shell.html cmd=cmd4 %}
 
 The "user" configuration file above stopped working at some point; not sure as
 to who's to blame, Cygwin or Boost.
@@ -199,8 +199,8 @@ cmake -G "Visual Studio 14 2015" ^
     ...
 {% endcapture %}
 
-{% include shell.html cmd='cd' out=out1 %}
-{% include shell.html cmd=cmd2 %}
+{% include jekyll-theme/shell.html cmd='cd' out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 %}
 
 #### x64
 
@@ -217,8 +217,8 @@ cmake -G "Visual Studio 14 2015 Win64" ^
     ...
 {% endcapture %}
 
-{% include shell.html cmd='cd' out=out1 %}
-{% include shell.html cmd=cmd2 %}
+{% include jekyll-theme/shell.html cmd='cd' out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 %}
 
 ### Cygwin & MinGW-w64
 
@@ -244,8 +244,8 @@ cmake -G "Unix Makefiles"                      \
     ...
 {% endcapture %}
 
-{% include shell.html cmd='pwd' out=out1 %}
-{% include shell.html cmd=cmd2 %}
+{% include jekyll-theme/shell.html cmd='pwd' out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 %}
 
 #### x64
 
@@ -264,5 +264,5 @@ cmake -G "Unix Makefiles"                        \
     ...
 {% endcapture %}
 
-{% include shell.html cmd='pwd' out=out1 %}
-{% include shell.html cmd=cmd2 %}
+{% include jekyll-theme/shell.html cmd='pwd' out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 %}

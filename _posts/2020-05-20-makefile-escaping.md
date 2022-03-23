@@ -106,8 +106,8 @@ line?
 Same line?
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd='make test' out=out2 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd='make test' out=out2 %}
 
 This is quite often sufficient to write valid recipes.
 
@@ -137,8 +137,8 @@ bash: -c: line 0: unexpected EOF while looking for matching `''
 make: *** [Makefile:11: test] Error 2
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd='make test' out=out2 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd='make test' out=out2 %}
 
 One solution is to take advantage of how `bash` parses command arguments, and
 replace every quote `'` by `'\''`.
@@ -161,8 +161,8 @@ printf '%s\n' 'Includes '\'' quote'
 Includes ' quote
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd='make test' out=out2 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd='make test' out=out2 %}
 
 Surprisingly, this works even in much more complicated cases.
 You can have a recipe that executes a command that takes a whole other command
@@ -195,8 +195,8 @@ bash -c 'bash -c '\''printf '\''\'\'''\''%s\n'\''\'\'''\'' '\''\'\'''\''Includes
 Includes ' quote
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd='make test' out=out2 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd='make test' out=out2 %}
 
 That's somewhat insane, but it works.
 
@@ -254,10 +254,10 @@ Variable ${reference}
 Composite value - Simple value - Variable ${reference}
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd=cmd2 out=out2 %}
-{% include shell.html cmd=cmd3 out=out3 %}
-{% include shell.html cmd=cmd4 out=out4 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 out=out2 %}
+{% include jekyll-theme/shell.html cmd=cmd3 out=out3 %}
+{% include jekyll-theme/shell.html cmd=cmd4 out=out4 %}
 
 Environment variables
 ---------------------
@@ -303,8 +303,8 @@ Variable
 Variable ${reference}
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd=cmd2 out=out2 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 out=out2 %}
 
 Here, `$(test_var)` is expanded recursively, substituting an empty string for
 the `${reference}` part.
@@ -319,7 +319,7 @@ Variable ${reference}
 Variable $${reference}
 {% endcapture %}
 
-{% include shell.html cmd=cmd1 out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd1 out=out1 %}
 
 A working solution would be to use the `escape` function on the unexpanded
 variable value.
@@ -348,8 +348,8 @@ Quote ' and variable ${reference}
 Quote ' and variable ${reference}
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd=cmd2 out=out2 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd2 out=out2 %}
 
 This doesn't quite work though when [overriding variables] on the command line.
 For example, this doesn't work:
@@ -366,7 +366,7 @@ Variable
 Variable
 {% endcapture %}
 
-{% include shell.html cmd=cmd1 out=out1 %}
+{% include jekyll-theme/shell.html cmd=cmd1 out=out1 %}
 
 This is because `make` ignores all assignments to `test_var` if it's overridden
 on the command line (including `test_var := $(value test_var)`).
@@ -476,7 +476,7 @@ Variable ${reference}
 Composite value - New simple value - Variable ${reference}
 {% endcapture %}
 
-{% include shell.html cmd='cat Makefile' out=out1 %}
-{% include shell.html cmd='make test' out=out2 %}
-{% include shell.html cmd=cmd3 out=out3 %}
-{% include shell.html cmd=cmd4 out=out4 %}
+{% include jekyll-theme/shell.html cmd='cat Makefile' out=out1 %}
+{% include jekyll-theme/shell.html cmd='make test' out=out2 %}
+{% include jekyll-theme/shell.html cmd=cmd3 out=out3 %}
+{% include jekyll-theme/shell.html cmd=cmd4 out=out4 %}

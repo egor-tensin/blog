@@ -161,7 +161,7 @@ Let's remove every other file for now:
 You can study the exact format of the metadata files in the [Debian New
 Maintainers' Guide], but for now let's keep it simple:
 
-{% include snippets/section.html section_id='basic' %}
+{% include jekyll-theme/snippets/section.html section_id='basic' %}
 
 The "control" and "copyright" files are fairly straighforward.
 The "changelog" file has a strict format and is supposed to be maintained using
@@ -185,7 +185,7 @@ While building the package, it'll get executed by `dh`, read the
 directories.
 Our test.install should look like this:
 
-{% include snippets/section.html section_id='install' %}
+{% include jekyll-theme/snippets/section.html section_id='install' %}
 
 At this point, we can actually build a proper Debian package!
 
@@ -225,7 +225,7 @@ We need to configure it so that it knows how the release tags look like
 the generated files.
 Create "debian/gbp.conf" with the following contents:
 
-{% include snippets/section.html section_id='gbp' %}
+{% include jekyll-theme/snippets/section.html section_id='gbp' %}
 
 One unclear line here is `pristine-tar = False`.
 It turns out, a lot of Debian package maintainers use the `pristine-tar` tool

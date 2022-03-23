@@ -64,7 +64,7 @@ For example, the program below would print
 due to the fact that both main.cpp and proxy.cpp get their own versions of `n`
 from `shared()`.
 
-{% include snippets/section.html section_id='static' %}
+{% include jekyll-theme/snippets/section.html section_id='static' %}
 
 In C, this is the only way to share function definitions between translation
 units (apart from the usual way of declaring a function in a header file and
@@ -92,7 +92,7 @@ function defined this way will be the same (as in "will have the same address")
 in every translation unit.
 Let's try and adjust the definition of `shared()` accordingly:
 
-{% include snippets/section.html section_id='inline' %}
+{% include jekyll-theme/snippets/section.html section_id='inline' %}
 
 The same program would then print
 
@@ -107,7 +107,7 @@ the same `n`.
 Weird things happen when different translation units define different `inline`
 functions with the same name.
 
-{% include snippets/section.html section_id='inline_weird' %}
+{% include jekyll-theme/snippets/section.html section_id='inline_weird' %}
 
 According to my simple experiments, this program produces different output
 based on which .cpp file was specified first on the command line during
@@ -162,7 +162,7 @@ Remember the weirdness that happens when multiple translation units define
 different `inline` functions with the same name?
 Arguably, it gets even worse if we add classes to the equation.
 
-{% include snippets/section.html section_id='unnamed_namespaces_weird' %}
+{% include jekyll-theme/snippets/section.html section_id='unnamed_namespaces_weird' %}
 
 Compiling this program the same way we did in the `inline` example (`cl /W4
 /EHsc main.cpp another.cpp /Fe:test.exe`/`g++ -Wall -Wextra -std=c++11 main.cpp
@@ -186,7 +186,7 @@ This can be easily fixed by putting both `Test` classes into unnamed
 namespaces.
 The program than reads
 
-{% include snippets/section.html section_id='unnamed_namespaces_ok' %}
+{% include jekyll-theme/snippets/section.html section_id='unnamed_namespaces_ok' %}
 
 After the adjustment, it produces the same output regardless of compilation
 options.
@@ -241,7 +241,7 @@ The program below outputs
 1
 ```
 
-{% include snippets/section.html section_id='static_and_inline' %}
+{% include jekyll-theme/snippets/section.html section_id='static_and_inline' %}
 
 In general, I can't think of a reason to define a `static inline` function.
 
@@ -256,7 +256,7 @@ The program below outputs
 1
 ```
 
-{% include snippets/section.html section_id='unnamed_namespace_and_inline' %}
+{% include jekyll-theme/snippets/section.html section_id='unnamed_namespace_and_inline' %}
 
 In general, I can't think of a reason to define an `inline` function in an
 unnamed namespace.
@@ -273,4 +273,4 @@ The program below outputs
 2
 ```
 
-{% include snippets/section.html section_id='separate_method_definitions' %}
+{% include jekyll-theme/snippets/section.html section_id='separate_method_definitions' %}
