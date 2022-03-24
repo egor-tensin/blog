@@ -1,5 +1,6 @@
 ---
-title: GNU Make
+title: Makefile
+subtitle: best practices
 ---
 Best practices for my Makefiles (sorry for the botched highlighting).
 

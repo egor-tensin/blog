@@ -1,5 +1,6 @@
 ---
-title: Markdown style guide
+title: Markdown
+subtitle: style guide
 ---
 * `diff`- and HTML-friendliness is valued over human-readability.
 * Every sentence starts on a new line ("semantic newlines").

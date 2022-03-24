@@ -1,5 +1,6 @@
 ---
-title: Basic LaTeX document
+title: LaTeX
+subtitle: document template
 ---
 A more-or-less complete, but still very basic LaTeX document follows.
 

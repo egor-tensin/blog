@@ -1,5 +1,6 @@
 ---
-title: GNU bash
+title: Bash
+subtitle: best practices
 ---
 (Associative) arrays
 --------------------

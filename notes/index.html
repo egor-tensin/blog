@@ -4,17 +4,19 @@ navbar:
   link: Notes
   priority: 3
 ---
-{% if site.notes.size != 0 %}
+{% if site.notes.size > 0 %}
+  {% comment %}
+    Sorting can be done in _config.yml with Jekyll 4.0 or later.
+  {% endcomment %}
+  {% assign note_list = site.notes | sort_natural: 'title' %}
   <p>Style guides and best practices, not worthy of a post.</p>
-  <ul>
-    {% comment %}
-      Sorting can be done in _config.yml with Jekyll 4.0 or later.
-    {% endcomment %}
-    {% assign note_list = site.notes | sort_natural: 'title' %}
+  <div class="list-group wide-enough">
     {% for note in note_list %}
-      <li><a href="{{ note.url | relative_url }}">{{ note.title }}</a></li>
+    <a href="{{ note.url | relative_url }}" class="list-group-item">
+      <h4 class="list-group-item-heading">{{ note.title }} <small>{{ note.subtitle }}</small></h4>
+    </a>
     {% endfor %}
-  </ul>
+  </div>
 {% else %}
   <p>Sorry, no notes have been added yet.</p>
 {% endif %}
