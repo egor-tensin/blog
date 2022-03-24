@@ -10,7 +10,7 @@ navbar:
     {% comment %}
       Sorting can be done in _config.yml with Jekyll 4.0 or later.
     {% endcomment %}
-    {% assign note_list = site.notes | sort: 'title' %}
+    {% assign note_list = site.notes | sort_natural: 'title' %}
     {% for note in note_list %}
       <li><a href="{{ note.url | relative_url }}">{{ note.title }}</a></li>
     {% endfor %}
