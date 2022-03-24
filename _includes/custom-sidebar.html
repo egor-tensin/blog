@@ -1,0 +1,8 @@
+{% if page.sidebar.notes.show %}
+
+{% capture notes %}
+{% include notes.html sidebar=true %}
+{% endcapture %}
+{% include jekyll-theme/sidebar/entry.html header='Notes' content=notes %}
+
+{% endif %}
