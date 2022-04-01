@@ -56,12 +56,74 @@ It doesn't affect expansion (see below) though.
 `errexit`
 ---------
 
-### Do
+I hate this feature, and I especially hate people who prefer "standards" over
+useful behaviour.
+
+### Command substitution
+
+#### Do
+
+    shopt -s inherit_errexit    # Without this, bar will be executed w/ errexit disabled!
+
+    bar() {
+        false
+        echo 'should never see this' >&2
+    }
 
     bar_output="$( bar )"
     foo "$bar_output"
 
-### Don't
+#### Don't
 
-    foo "$( bar )"    # With `errexit`, foo will still get executed.
-                      # I don't know why.
+    bar() {
+        false
+        echo 'should never see this' >&2
+    }
+
+    foo "$( bar )"    # Even with errexit, foo will still get executed.
+                      # More than that, the script will print 'should never see this'!
+
+### Process substitution
+
+#### Do
+
+    output="$( command )"
+
+    while IFS= read -r line; do
+        process_line "$line"
+    done <<< "$output"
+
+#### Don't
+
+    # This causes some bash insanity where you cannot change directories or set
+    # variables inside a loop: http://mywiki.wooledge.org/BashFAQ/024
+    command | while IFS= read -r line; do
+        process_line "$line"
+    done
+
+    # errexit doesn't work here no matter what:
+    while IFS= read -r line; do
+        process_line "$line"
+    done < <( command )
+    echo 'should never see this'
+
+### Functions
+
+#### Do
+
+    foo() {
+        false
+        echo 'should never see this' >&2
+    }
+
+    foo
+    echo ok
+
+#### Don't
+
+    if foo; then
+        echo ok       # foo will still print 'should never see this'.
+    fi
+
+    foo && echo ok    # Same here.
+    foo || echo ok
