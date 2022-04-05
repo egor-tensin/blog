@@ -14,7 +14,7 @@
   {% endif %}
   {% for note in note_list %}
   <a href="{{ note.url | relative_url }}" class="list-group-item">
-    <{{ h }} class="list-group-item-heading" style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-grap: .5em;">
+    <{{ h }} class="list-group-item-heading post-header">
       <span>{{ note.title }}</span>
       <small>{{ note.subtitle }}</small>
     </{{ h }}>
