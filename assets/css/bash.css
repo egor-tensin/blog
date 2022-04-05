@@ -1,0 +1,21 @@
+.pre_container {
+  position: relative;
+}
+.pre_mark {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  user-select: none;
+}
+.pre_do pre {
+  border-color: #00d100;
+}
+.pre_do .glyphicon {
+  color: #00d100;
+}
+.pre_dont pre {
+  border-color: red;
+}
+.pre_dont .glyphicon {
+  color: red;
+}

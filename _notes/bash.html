@@ -2,6 +2,8 @@
 title: Bash
 subtitle: best practices
 layout: plain
+links:
+  - {rel: stylesheet, href: 'assets/css/bash.css'}
 features:
   - title: Arrays
     topics:
@@ -133,12 +135,18 @@ features:
     <div class="row">
       <div class="col-md-6">
         {% for guide in topic.do %}
-          {% highlight bash %}{{ guide }}{% endhighlight %}
+          <div class="pre_container pre_do">
+            {% highlight bash %}{{ guide }}{% endhighlight %}
+            <div class="pre_mark"><span class="glyphicon glyphicon-ok"></span></div>
+          </div>
         {% endfor %}
       </div>
       <div class="col-md-6">
         {% for guide in topic.dont %}
-          {% highlight bash %}{{ guide }}{% endhighlight %}
+          <div class="pre_container pre_dont">
+            {% highlight bash %}{{ guide }}{% endhighlight %}
+            <div class="pre_mark"><span class="glyphicon glyphicon-remove"></span></div>
+          </div>
         {% endfor %}
       </div>
     </div>
