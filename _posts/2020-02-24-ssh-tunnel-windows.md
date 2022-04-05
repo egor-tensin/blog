@@ -22,9 +22,7 @@ access to HTTPS server `dest` on port 443, which is only accessible from the
 network both it and the SSH server belong to.
 You can then run something like
 
-```
-ssh -L 4433:dest:443 gateway -p 22
-```
+{% include jekyll-theme/shell.html cmd='ssh -L 4433:dest:443 gateway -p 22' %}
 
 And now you can access `dest` at `https://localhost:4433/`.
 That's brilliant, really.
@@ -48,9 +46,7 @@ connections are filtered).
 
 You can then run something like (notice the `-R`)
 
-```
-ssh -R 13389:127.0.0.1:3389 gateway -p 22
-```
+{% include jekyll-theme/shell.html cmd='ssh -R 13389:127.0.0.1:3389 gateway -p 22' %}
 
 and now you can connect to `gateway:13389` from your home computer using a RDP
 client.
@@ -78,7 +74,7 @@ additional commands.
 
 Thus, the full command would be something like
 
-```
+{% capture cmd1 %}
 ssh                                \
     -F /dev/null                   \
     -oBatchMode=yes                \
@@ -91,7 +87,9 @@ ssh                                \
     -R 13389:127.0.0.1:3389        \
     user@gateway -p 22             \
     -i ~/.ssh/tunnel
-```
+{% endcapture %}
+
+{% include jekyll-theme/shell.html cmd=cmd1 %}
 
 Adjust the `user@gateway -p 22` part accordingly.
 
@@ -127,7 +125,7 @@ native Windows service.
 Using `cygrunsrv`, you can create a Windows service to establish a reverse SSH
 tunnel automatically.
 
-```
+{% capture cmd1 %}
 cygrunsrv                        \
     -I ssh_tunnel                \
     -p /usr/bin/ssh              \
@@ -136,7 +134,9 @@ cygrunsrv                        \
     --user user                  \
     --neverexits                 \
     --preshutdown
-```
+{% endcapture %}
+
+{% include jekyll-theme/shell.html cmd=cmd1 %}
 
 Adjust the `--user` and the `--args` values accordingly.
 

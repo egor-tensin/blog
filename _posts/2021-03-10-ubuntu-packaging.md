@@ -61,7 +61,7 @@ This process is greatly aided by the [git-buildpackage] tool.
 We still need to install a bunch of other stuff though; the complete command
 line to install the required tools would be something like
 
-    sudo apt install -y build-essential devscripts dh-make git-buildpackage
+{% include jekyll-theme/shell.html cmd='sudo apt install -y build-essential devscripts dh-make git-buildpackage' %}
 
 Many of the tools pick up particular metadata (like the maintainer name and
 email address) from environment variables.
@@ -83,20 +83,25 @@ Let's create a repository to try things out.
 It'll contain a single executable shell script test.sh, which only outputs the
 string "test".
 
-    mkdir test
-    cd test
-    git init
-    cat <<'EOF' > test.sh
-    #!/usr/bin/env bash
-    echo test
-    EOF
-    chmod +x test.sh
-    git add .
-    git commit -m 'initial commit'
+{% include jekyll-theme/shell.html cmd='mkdir test' %}
+{% include jekyll-theme/shell.html cmd='cd test' %}
+{% include jekyll-theme/shell.html cmd='git init' %}
+
+{% capture cmd1 %}
+cat <<'EOF' > test.sh
+#!/usr/bin/env bash
+echo test
+EOF
+{% endcapture %}
+{% include jekyll-theme/shell.html cmd=cmd1 %}
+
+{% include jekyll-theme/shell.html cmd='chmod +x test.sh' %}
+{% include jekyll-theme/shell.html cmd='git add .' %}
+{% include jekyll-theme/shell.html cmd='git commit -m \'initial commit\'' %}
 
 This is going to be version 1.0 of our project, let's tag it as such.
 
-    git tag -a -m 'Release 1.0' v1.0
+{% include jekyll-theme/shell.html cmd='git tag -a -m \'Release 1.0\' v1.0' %}
 
 All of the Debian packaging tools are tailored to the following use-case.
 
@@ -122,7 +127,7 @@ The bleeding-edge packaging work should target the "unstable" distribution.
 
 So, let's create a new branch `debian` for our packaging work:
 
-    git checkout -b debian
+{% include jekyll-theme/shell.html cmd='git checkout -b debian' %}
 
 All the packaging tools assume there's a separate folder "debian" that contains
 the package metadata files.
@@ -135,12 +140,12 @@ Why?
 Who knows.
 Let's create said tarball:
 
-    git archive --format=tar --prefix=test_1.0/ v1.0 | gzip -c > ../test_1.0.orig.tar.gz
+{% include jekyll-theme/shell.html cmd='git archive --format=tar --prefix=test_1.0/ v1.0 | gzip -c > ../test_1.0.orig.tar.gz' %}
 
 The tarball name should follow the NAME_VERSION.orig.tar.gz pattern exactly!
 Anyway, now is the time to run `dh_make`:
 
-    dh_make --indep --copyright mit --packagename test_1.0 --yes
+{% include jekyll-theme/shell.html cmd='dh_make --indep --copyright mit --packagename test_1.0 --yes' %}
 
 I'm using the MIT License for our little script, hence the `--copyright mit`
 argument.
@@ -156,7 +161,7 @@ The only required ones are "changelog", "control", "source", "rules" and the
 "source" directory.
 Let's remove every other file for now:
 
-    rm -f -- debian/*.ex debian/*.EX debian/README.* debian/*.docs
+{% include jekyll-theme/shell.html cmd='rm -f -- debian/*.ex debian/*.EX debian/README.* debian/*.docs' %}
 
 You can study the exact format of the metadata files in the [Debian New
 Maintainers' Guide], but for now let's keep it simple:
@@ -189,13 +194,13 @@ Our test.install should look like this:
 
 At this point, we can actually build a proper Debian package!
 
-    dpkg-buildpackage -uc -us
+{% include jekyll-theme/shell.html cmd='dpkg-buildpackage -uc -us' %}
 
 This command will generate a bunch of files in the parent directory.
 The one of interest to us is "test_1.0-1_all.deb".
 We can install it using `dpkg`:
 
-    sudo dpkg -i ../test_1.0-1_all.deb
+{% include jekyll-theme/shell.html cmd='sudo dpkg -i ../test_1.0-1_all.deb' %}
 
 We can now execute `test.sh`, and it'll hopefully print the string "test".
 
@@ -236,12 +241,12 @@ git-buildpackage will just use the normal `git archive` to create tarballs.
 
 First, commit the packaging work we just made:
 
-    git add debian/
-    git commit -m 'initial Debian release'
+{% include jekyll-theme/shell.html cmd='git add debian/' %}
+{% include jekyll-theme/shell.html cmd='git commit -m \'initial Debian release\'' %}
 
 We can now build the package using git-buildpackage:
 
-    gbp buildpackage
+{% include jekyll-theme/shell.html cmd='gbp buildpackage' %}
 
 The tool will try to sign the packages, so this assumes that you have your
 GnuPG key set up!
@@ -251,13 +256,13 @@ And it hasn't crapped all over the working directory too!
 Similar to `dpkg-buildpackage`, it builds binary packages by default.
 To build _source_ packages, it needs to be invoked with the `-S` argument:
 
-    gbp buildpackage -S
+{% include jekyll-theme/shell.html cmd='gbp buildpackage -S' %}
 
 It'll build the source package in the same directory (you'll notice a lot of
 files having the "_source" suffix).
 If all is well, we can tag the packaging work we've just completed:
 
-    gbp buildpackage --git-tag-only
+{% include jekyll-theme/shell.html cmd='gbp buildpackage --git-tag-only' %}
 
 This will create the `debian/1.0-1` tag in the repository.
 
@@ -265,14 +270,14 @@ We are now ready to upload the source package to Launchpad.
 It's done using the `dput` tool.
 The naive way would fail:
 
-    dput ppa:john-doe/test ../build-area/test_1.0-1_source.changes
+{% include jekyll-theme/shell.html cmd='dput ppa:john-doe/test ../build-area/test_1.0-1_source.changes' %}
 
 This is due to the fact that we've specified that we're targetting the
 "unstable" distribution in debian/changelog.
 There's no "unstable" distribution of Ubuntu though; we need to manually
 specify the minimal-supported version (e.g. "bionic"):
 
-    dput ppa:john-doe/test/ubuntu/bionic ../build-area/test_1.0-1_source.changes
+{% include jekyll-theme/shell.html cmd='dput ppa:john-doe/test/ubuntu/bionic ../build-area/test_1.0-1_source.changes' %}
 
 What about other distributions?
 Well, if the binary package doesn't need recompiling, we can use Launchpad's
@@ -287,17 +292,17 @@ When a new version is released, git-buildpackage helps to integrate it to the
 packaging branch.
 Let's say the new version is tagged `v1.1`:
 
-    git checkout debian
-    git merge v1.1
-    gbp dch
+{% include jekyll-theme/shell.html cmd='git checkout debian' %}
+{% include jekyll-theme/shell.html cmd='git merge v1.1' %}
+{% include jekyll-theme/shell.html cmd='gbp dch' %}
 
 The above command will update debian/changelog; modify it manually to target
 the usual "unstable" distribution instead of "UNRELEASED" and update the
 version to something like "1.1-1".
 
-    git add debian/
-    git commit -m 'Debian release 1.1'
-    gbp buildpackage -S
+{% include jekyll-theme/shell.html cmd='git add debian/' %}
+{% include jekyll-theme/shell.html cmd='git commit -m \'Debian release 1.1\'' %}
+{% include jekyll-theme/shell.html cmd='gbp buildpackage -S' %}
 
 This will build the source package for the new version in the ../build-area
 directory; you can then upload it Launchpad and copy the built binary packages.
