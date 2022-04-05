@@ -103,27 +103,37 @@ foo "$( bar )"    # Even with errexit, foo will still get executed.
 #### Do
 
 ```bash
-output="$( command )"
+shopt -s lastpipe
 
-while IFS= read -r line; do
+command | while IFS= read -r line; do
     process_line "$line"
-done <<< "$output"
+done
 ```
 
 #### Don't
 
 ```bash
-# This causes some bash insanity where you cannot change directories or set
-# variables inside a loop: http://mywiki.wooledge.org/BashFAQ/024
+# Without lastpipe, you cannot pipe into read:
 command | while IFS= read -r line; do
     process_line "$line"
 done
+```
 
+```bash
 # errexit doesn't work here no matter what:
 while IFS= read -r line; do
     process_line "$line"
 done < <( command )
 echo 'should never see this'
+```
+
+```bash
+# This would break if $output contains the \0 byte:
+output="$( command )"
+
+while IFS= read -r line; do
+    process_line "$line"
+done <<< "$output"
 ```
 
 ### Functions
