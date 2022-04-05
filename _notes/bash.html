@@ -5,6 +5,17 @@ layout: plain
 links:
   - {rel: stylesheet, href: 'assets/css/bash.css'}
 features:
+  - title: Script header
+    topics:
+      - do:
+          - |
+            #!/usr/bin/env bash
+
+            set -o errexit -o nounset -o pipefail
+            shopt -s inherit_errexit lastpipe
+        dont:
+          - |
+            #!/bin/sh -e
   - title: Arrays
     topics:
       - title: Declaration
@@ -148,7 +159,9 @@ features:
 {% for feature in page.features %}
   <h2>{{ feature.title }}</h2>
   {% for topic in feature.topics %}
-    <h3>{{ topic.title }}</h3>
+    {% if topic.title %}
+      <h3>{{ topic.title }}</h3>
+    {% endif %}
     <div class="row">
       <div class="col-md-6">
         {% for guide in topic.do %}
