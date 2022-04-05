@@ -14,9 +14,6 @@ features:
             declare -a xs=()
             local -A xs=()
             declare -A xs=()
-
-            # Works with nounset:
-            echo "${#xs[@]}"
         dont:
           - |
             local -a xs
@@ -34,7 +31,9 @@ features:
           - |
             # Doesn't work with nounset:
             func "${arr[@]}"
-            # Doesn't work properly with `declare -a arr=('')`:
+          - |
+            # Expands to 0 arguments instead of 1:
+            declare -a arr=('')
             func "${arr[@]+"${arr[@]}"}"
       - title: unset
         do:
@@ -60,49 +59,63 @@ features:
       - title: Command substitution
         do:
           - |
-            # Without this, bar will be executed w/ errexit disabled!
             shopt -s inherit_errexit
 
-            bar() {
-                false
-                echo 'should never see this' >&2
-            }
+            foo() { echo foo ; }
+            bar() { false ; echo bar >&2 ; }
 
-            bar_output="$( bar )"
-            foo "$bar_output"
+            output="$( bar )"
+            foo "$output"
+
+            # If inherit_errexit is unavailable, you can do
+            #output="$( set -e; bar )"
         dont:
           - |
-            bar() {
-                false
-                echo 'should never see this' >&2
-            }
+            foo() { echo foo ; }
+            bar() { false ; echo bar >&2 ; }
 
-            # Even with errexit, foo will still get executed.
-            # More than that, the script will print 'should never see this'!
+            # This will print both "foo" and "bar":
             foo "$( bar )"
+            # This will also print "foo":
+            foo "$( false )"
+          - |
+            foo() { echo foo ; }
+            bar() { false ; echo bar >&2 ; }
+
+            # This will still print both "foo" and "bar".
+            output="$( bar )"
+            foo "$output"
+
+            # This won't print anything.
+            output="$( false )"
+            foo "$output"
       - title: Process substitution
         do:
           - |
             shopt -s lastpipe
 
-            command | while IFS= read -r line; do
-                process_line "$line"
+            result=()
+            cmd | while IFS= read -r line; do
+                result+=("$( process_line "$line" )")
             done
         dont:
           - |
-            # Without lastpipe, you cannot pipe into read:
-            command | while IFS= read -r line; do
-                process_line "$line"
+            # Without lastpipe, the loop is executed is a subshell,
+            # and the array will be empty:
+            result=()
+            cmd | while IFS= read -r line; do
+                result+=("$( process_line "$line" )")
             done
           - |
-            # errexit doesn't work here no matter what:
+            # errexit doesn't work for <( cmd ) no matter what:
             while IFS= read -r line; do
                 process_line "$line"
-            done < <( command )
+            done < <( cmd )
+            # This will be printed even if cmd fails:
             echo 'should never see this'
           - |
-            # This would break if $output contains the \0 byte:
-            output="$( command )"
+            # This breaks if $output contains the \0 byte:
+            output="$( cmd )"
 
             while IFS= read -r line; do
                 process_line "$line"
@@ -110,23 +123,27 @@ features:
       - title: Functions
         do:
           - |
-            foo() {
-                false
-                echo 'should never see this' >&2
-            }
+            foo() { false ; echo foo >&2 ; }
 
             foo
             echo ok
         dont:
           - |
-            # foo will still print 'should never see this'.
+            foo() { false ; echo foo >&2 ; }
+
+            # This will print "foo" no matter what.
             if foo; then
                 echo ok
             fi
 
             # Same below.
             foo && echo ok
-            foo || echo ok
+            foo || echo fail
+
+            # It currently appears to be completely impossible to
+            # execute a function inside a conditional with errexit
+            # enabled. Therefore, you should try to avoid this
+            # whenever possible.
 ---
 {% for feature in page.features %}
   <h2>{{ feature.title }}</h2>
