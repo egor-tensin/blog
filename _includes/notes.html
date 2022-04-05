@@ -3,17 +3,21 @@
 {% endcomment %}
 {% assign note_list = site.notes | sort_natural: 'title' %}
 <div class="list-group wide-enough">
+  {% assign h = 'h4' %}
+  {% if include.sidebar %}
+    {% assign h = 'h5' %}
+  {% endif %}
+  {% if include.sidebar %}
+  <div class="list-group-item disabled">
+    <h4 class="list-group-item-heading">notes</h4>
+  </div>
+  {% endif %}
   {% for note in note_list %}
   <a href="{{ note.url | relative_url }}" class="list-group-item">
-    {% if include.sidebar %}
-      <span class="badge">{{ note.subtitle }}</span>
-      <span class="glyphicon glyphicon-file"></span>&nbsp;{{ note.title }}
-    {% else %}
-      <h4 class="list-group-item-heading" style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-grap: .5em;">
-        <span>{{ note.title }}</span>
-        <small>{{ note.subtitle }}</small>
-      </h4>
-    {% endif %}
+    <{{ h }} class="list-group-item-heading" style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-grap: .5em;">
+      <span>{{ note.title }}</span>
+      <small>{{ note.subtitle }}</small>
+    </{{ h }}>
   </a>
   {% endfor %}
 </div>
