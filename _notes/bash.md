@@ -1,68 +1,95 @@
 ---
 title: Bash
 subtitle: best practices
+layout: plain
 ---
-(Associative) arrays
---------------------
+
+Arrays
+------
 
 ### Declaration
 
-`"${#xs[@]}"` doesn't work with `nounset` if `xs` wasn't defined, i.e. was
-declared with either of
+<div class="row">
+  <div class="col-md-6" markdown="1">
+
+```bash
+local -a xs=()
+declare -a xs=()
+local -A xs=()
+declare -A xs=()
+
+# Works with nounset:
+echo "${#xs[@]}"
+```
+
+  </div>
+  <div class="col-md-6" markdown="1">
 
 ```bash
 local -a xs
 declare -a xs
 local -A xs
 declare -A xs
+
+# Doesn't work with nounset:
+echo "${#xs[@]}"
 ```
 
-Therefore, if you want to extract the length of an array, append `=()` to the
-statements above.
-
-```bash
-local -a xs=()
-declare -a xs=()
-```
-
-And now `"${#xs[@]}"` works with `nounset`.
-It doesn't affect expansion (see below) though.
+  </div>
+</div>
 
 ### Expansion
 
-#### Do
+<div class="row">
+  <div class="col-md-6" markdown="1">
 
 ```bash
 func ${arr[@]+"${arr[@]}"}
 ```
 
-#### Don't
+  </div>
+  <div class="col-md-6" markdown="1">
 
 ```bash
-func "${arr[@]}"                # Doesn't work with `nounset`.
-func "${arr[@]+"${arr[@]}"}"    # Doesn't work properly with `declare -a arr=('')`.
+# Doesn't work with nounset:
+func "${arr[@]}"
+# Doesn't work properly with `declare -a arr=('')`:
+func "${arr[@]+"${arr[@]}"}"
 ```
+
+  </div>
+</div>
 
 ### `unset`
 
-#### Do
+<div class="row">
+  <div class="col-md-6" markdown="1">
 
 ```bash
 unset -v 'arr[x]'
 unset -v 'arr[$i]'
 ```
 
-#### Don't
+  </div>
+  <div class="col-md-6" markdown="1">
 
 ```bash
-unset -v arr[x]         # May break due to globbing.
-unset -v arr[$i]        # The same as above + a possible problem with quotation.
-unset -v 'arr["x"]'     # Doesn't work for some reason.
-unset -v 'arr["]"]'     # The same as above; just highlighting the problem with funny characters in array indices.
-unset -v 'arr["$i"]'    # Also rejected.
+# May break due to globbing:
+unset -v arr[x]
+# In addition, possible quoting problem:
+unset -v arr[$i]
+# Doesn't work for some reason:
+unset -v 'arr["x"]'
+unset -v 'arr["]"]'
+# Also rejected:
+unset -v 'arr["$i"]'
 
-# An insightful discussion on the topic: https://lists.gnu.org/archive/html/help-bash/2016-09/msg00020.html.
+# An insightful discussion on the topic:
+# https://lists.gnu.org/archive/html/help-bash/2016-09/msg00020.html
 ```
+
+  </div>
+</div>
 
 `errexit`
 ---------
@@ -72,10 +99,12 @@ useful behaviour.
 
 ### Command substitution
 
-#### Do
+<div class="row">
+  <div class="col-md-6" markdown="1">
 
 ```bash
-shopt -s inherit_errexit    # Without this, bar will be executed w/ errexit disabled!
+# Without this, bar will be executed w/ errexit disabled!
+shopt -s inherit_errexit
 
 bar() {
     false
@@ -86,7 +115,8 @@ bar_output="$( bar )"
 foo "$bar_output"
 ```
 
-#### Don't
+  </div>
+  <div class="col-md-6" markdown="1">
 
 ```bash
 bar() {
@@ -94,13 +124,18 @@ bar() {
     echo 'should never see this' >&2
 }
 
-foo "$( bar )"    # Even with errexit, foo will still get executed.
-                  # More than that, the script will print 'should never see this'!
+# Even with errexit, foo will still get executed.
+# More than that, the script will print 'should never see this'!
+foo "$( bar )"
 ```
+
+  </div>
+</div>
 
 ### Process substitution
 
-#### Do
+<div class="row">
+  <div class="col-md-6" markdown="1">
 
 ```bash
 shopt -s lastpipe
@@ -110,7 +145,8 @@ command | while IFS= read -r line; do
 done
 ```
 
-#### Don't
+  </div>
+  <div class="col-md-6" markdown="1">
 
 ```bash
 # Without lastpipe, you cannot pipe into read:
@@ -136,9 +172,13 @@ while IFS= read -r line; do
 done <<< "$output"
 ```
 
+  </div>
+</div>
+
 ### Functions
 
-#### Do
+<div class="row">
+  <div class="col-md-6" markdown="1">
 
 ```bash
 foo() {
@@ -150,13 +190,19 @@ foo
 echo ok
 ```
 
-#### Don't
+  </div>
+  <div class="col-md-6" markdown="1">
 
 ```bash
+# foo will still print 'should never see this'.
 if foo; then
-    echo ok       # foo will still print 'should never see this'.
+    echo ok
 fi
 
-foo && echo ok    # Same here.
+# Same below.
+foo && echo ok
 foo || echo ok
 ```
+
+  </div>
+</div>
