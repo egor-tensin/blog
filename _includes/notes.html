@@ -16,7 +16,7 @@
   <a href="{{ note.url | relative_url }}" class="list-group-item">
     <{{ h }} class="list-group-item-heading post-header">
       <span class="text-monospace">{{ note.title }}</span>
-      <small>{{ note.subtitle }}</small>
+      <small class="post-date">{{ note.subtitle }}</small>
     </{{ h }}>
   </a>
   {% endfor %}
