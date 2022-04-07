@@ -1,8 +1,8 @@
-{% if page.sidebar.notes.show %}
+{% unless page.sidebar.notes.hide %}
 
 {% capture notes %}
 {% include notes.html sidebar=true %}
 {% endcapture %}
 {% include jekyll-theme/sidebar/entry.html content=notes %}
 
-{% endif %}
+{% endunless %}
