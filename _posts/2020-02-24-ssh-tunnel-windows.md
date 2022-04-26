@@ -8,18 +8,18 @@ immediately blown away by how useful it can be.
 
 Basically, to use SSH tunneling (a.k.a. port forwarding) you need to have a SSH
 client (`ssh`) with an access to a SSH server.
-You can then access any port on any host your SSH server has access to.
+You can then access any host your SSH server has access to.
 It works like this:
 
-* your SSH client establishes a connection to the SSH server,
+* the client establishes a connection to the SSH server,
 * the client asks the server to forward incoming requests to the destination
 host,
-* the client listens to the proxy port on the local machine, and forwards
+* the client listens on a proxy port on the local machine, and forwards
 requests to the SSH server.
 
 Say, you have access to SSH server `gateway` on port 22, and you want to gain
 access to HTTPS server `dest` on port 443, which is only accessible from the
-network both it and the SSH server belong to.
+the SSH server.
 You can then run something like
 
 {% include jekyll-theme/shell.html cmd='ssh -L 4433:dest:443 gateway -p 22' %}
@@ -32,8 +32,8 @@ You can make a _reverse_ tunnel, allowing you to give access to any host your
 client computer has access to, via a remote SSH server.
 It works like this:
 
-* your SSH client establishes a connection with the SSH server,
-* the client asks the server to listen to a port of your choosing and forward
+* your SSH client establishes a connection to the SSH server,
+* the client asks the server to listen on a port of your choosing and forward
 incoming requests to the client,
 * the client forwards incoming requests to the destination host.
 
