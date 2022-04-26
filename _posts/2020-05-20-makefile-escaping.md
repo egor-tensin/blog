@@ -35,7 +35,7 @@ variable, but the same rules should apply for all similar `sh`-like shells.
 TL;DR
 -----
 
-Visit [this page] for an all-in-one Makefile.
+Visit [this page] for an all-in-one Makefile template.
 {: .alert .alert-info }
 
 [this page]: {{ site.baseurl }}{% link _notes/makefile.md %}
