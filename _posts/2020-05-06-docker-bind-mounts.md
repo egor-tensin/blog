@@ -180,25 +180,19 @@ stat -c '%u' data
 {% include jekyll-theme/shell.html cmd=cmd3 %}
 {% include jekyll-theme/shell.html cmd=cmd4 out=out4 %}
 
+Going hardcore
+--------------
+
 Sometimes `--user` is not enough though.
-That specified user is almost certainly missing from container's /etc/passwd,
-it doesn't have a $HOME, etc.
+The specified user is almost certainly missing from container's /etc/passwd, it
+doesn't have a $HOME directory, etc.
 All of that could cause problems with some applications.
 
-One scenario I had to deal with is making an image that bundles all the gems
-(and a specific Ruby version) for my Ruby web application.
-That application shouldn't be run as root, but it must be able to pick up code
-changes on the fly, and I should be able to `docker exec` into the container,
-update the dependencies (along with Gemfile[.lock], and those changes should be
-reflected on the host without messing up file metadata), and restart the app.
-It's quite easy to install the dependencies in the Dockerfile, but they (along
-with the mapped Gemfile[.lock]) should be writable by the user running the
-service.
 The solution often suggested is to create a container user with a fixed UID
 (that would match the host user UID).
-That way, it would be able to update the dependencies stored in the container,
-as well as write to the bind mount owned by the host user with the same UID.
-Additionally, file ownership info would be preserved on the host!
+That way, the app won't be run as root, the user will have a proper entry in
+/etc/passwd, it will be able to write to the bind mount owned by the host user,
+and it won't have to change the directory's permissions.
 
 We can create a user with a fixed UID when
 
@@ -206,17 +200,16 @@ We can create a user with a fixed UID when
 2. first starting the container by passing the required UID using environment
 variables.
 
-The advantages of creating the user when building the image is that we can also
-install the dependencies in the Dockerfile, thus eliminating the need to
-rebuild them for every other application.
+The advantage of creating the user when building the image is that we can also
+do additional work in the Dockerfile (like if you need to install dependencies
+as that user).
 The disadvantage is that the image would need to be rebuilt for every user on
 every machine.
 
-Creating the user when first starting the container has the advantage of not
-requiring image rebuilds.
-But, as the dependencies need to be installed after creating the user, you'd
-have to waste resources by installing them for every user and every app on
-every machine (each time when creating a container).
+Creating the user when first starting the container switches the pros and cons.
+You don't need to rebuild the image every time, but you'll have to waste time
+and resources by doing the additional work that could've been done in the
+Dockerfile every time you create a container.
 
 For my project [jekyll-docker] I opted for the former approach, making sure the
 `jekyll` process runs with the same UID as the user who built the image (unless
