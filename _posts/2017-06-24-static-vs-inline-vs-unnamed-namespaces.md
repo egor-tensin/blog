@@ -45,6 +45,23 @@ snippets:
 In this post I'll try to figure out whether I should use `static`, `inline` or
 unnamed namespaces for function definitions.
 
+TL;DR
+-----
+
+Here's my attempt to build an algorithm to decide whether a class/function
+should be defined with either of the `static`/`inline` specifiers or put into
+an unnamed namespace.
+The first question I answer is: is the entity defined in a header file or in a
+.cpp file?
+
+* **In a header** &mdash; Is it a class or a function?
+    * **Class** &mdash; There's no need to do anything.
+    * **Function** &mdash; Do you want it to behave differently for each
+translation unit (may be useful, for example, for logging)?
+        * **Yes** &mdash; Use `static`.
+        * **No** &mdash; Use `inline`.
+* **In a .cpp file** &mdash; Put it into an unnamed namespace.
+
 `static`
 --------
 
@@ -209,23 +226,6 @@ classes.
 of a function/class, including their own local static variables, etc.
 * Defining different classes with the same name in different translation units
 (without utilizing unnamed namespaces) is undefined behavior.
-
-Conclusion
-----------
-
-Here's my attempt to build an algorithm to decide whether a class/function
-should be defined with either of the `static`/`inline` specifiers or put into
-an unnamed namespace.
-The first question I answer is: is the entity defined in a header file or in a
-.cpp file?
-
-* **In a header** &mdash; Is it a class or a function?
-    * **Class** &mdash; There's no need to do anything.
-    * **Function** &mdash; Do you want it to behave differently for each
-translation unit (may be useful, for example, for logging)?
-        * **Yes** &mdash; Use `static`.
-        * **No** &mdash; Use `inline`.
-* **In a .cpp file** &mdash; Put it into an unnamed namespace.
 
 Tricky cases
 ------------
