@@ -42,19 +42,22 @@ Visit [this page] for an all-in-one Makefile template.
 
 * Put the prologue above at the top of your Makefile.
 * Quote command arguments in Makefiles using single quotes `'`.
-* Don't use `'` and `$` in stuff like file paths/environment variable values,
-and you're pretty much good to go.
 * Define a helper function:
 
       escape = $(subst ','\'',$(1))
 
-  It protects against quite characters in command arguments.
-  You can then replace things like `'$(dangerous_variable)'` or `'$(shell
-your-command arg1 arg2)'` with `'$(call escape,$(dangerous_variable))'` and
-`'$(call escape,$(shell your-command arg1 arg2))'`.
+  Instead of:
+
+      test:
+          echo '$(var)'
+
+  do
+
+      test:
+          echo '$(call escape,$(var))'
+
 * If you use environment variables in your Makefile (or you override variables
-on the command line), add the following lengthy snippet to prevent the values
-from being expanded:
+on the command line), add the following lengthy snippet:
 
       define noexpand
       ifeq ($$(origin $(1)),environment)
@@ -272,10 +275,9 @@ These parameters are often defined in a Makefile like this:
 param_name ?= Default value
 ```
 
-They should be quoted when passed to external commands, of course.
-To prevent mismatched quotes, the `escape` function might seem useful, but in
-case of environment variables, a complication arises when they contain dollar
-signs `$`.
+They should be `escape`d and quoted when passed to external commands, of
+course.
+However, things get complicated when they contain dollar signs `$`.
 `make` variables may contain references to other variables, and they're
 expanded recursively either when defined (for `:=` assignments) or when used
 (in all other cases, including `?=`).
@@ -413,10 +415,8 @@ endif
 endef
 
 test_var ?= This is safe.
-test_var2 ?= This is safe - 2.
 
 $(eval $(call noexpand,test_var))
-$(eval $(call noexpand,test_var2))
 ```
 
 I couldn't find a case where the combination of `escape` and `noexpand`
