@@ -74,10 +74,10 @@ on the command line), add the following lengthy snippet:
   Then `eval` the `noexpand` function output for every possibly overridden
 variable or a used environment variable:
 
-      param_with_default_value ?= Default value
-      $(eval $(call noexpand,param_with_default_value))
+      has_default ?= Default value
+      $(eval $(call noexpand,has_default))
 
-      $(eval $(call noexpand,used_environment_variable))
+      $(eval $(call noexpand,ENV_VAR))
 
 Quoting arguments
 -----------------
