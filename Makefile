@@ -31,13 +31,15 @@ ruby:
 deps: ruby
 	bundle install
 
+jekyll := bundle exec jekyll
+
 .PHONY: build
 build:
-	bundle exec jekyll build --drafts
+	$(jekyll) build
 
 .PHONY: serve
 serve:
-	bundle exec jekyll serve --drafts --host 0.0.0.0
+	$(jekyll) serve
 
 URL := http://localhost:4000/blog/
 
