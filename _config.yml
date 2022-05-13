@@ -37,7 +37,7 @@ defaults:
       layout: page
 
 excerpt_separator: ''
-permalink: none
+permalink: /:title:output_ext
 
 highlighter: rouge
 markdown: kramdown
