@@ -50,3 +50,15 @@ wget:
 .PHONY: view
 view:
 	xdg-open '$(call escape,$(URL))' &> /dev/null
+
+REMOTE_USER ?= who
+REMOTE_HOST ?= where
+REMOTE_DIR  ?= /path/to/dir
+
+$(eval $(call noexpand,REMOTE_USER))
+$(eval $(call noexpand,REMOTE_HOST))
+$(eval $(call noexpand,REMOTE_DIR))
+
+.PHONY: deploy
+deploy:
+	rsync -avh -e 'ssh -o StrictHostKeyChecking=no' _site/ '$(call escape,$(REMOTE_USER)@$(REMOTE_HOST):$(REMOTE_DIR)/)' --delete
