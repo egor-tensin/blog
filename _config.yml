@@ -51,6 +51,7 @@ plugins:
   - jekyll-github-metadata
   - jekyll-paginate
   - jekyll-remote-theme
+  - jekyll-tidy
 
 # jekyll-github-metadata
 repository: egor-tensin/blog
