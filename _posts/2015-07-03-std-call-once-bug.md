@@ -239,7 +239,7 @@ be found in this blog's repository.
 
 [complete code sample]: {{ site.github.repository_url }}/tree/master/std_call_once_bug
 
-Resolution
+Conclusion
 ----------
 
 So, since I couldn't submit the bug via Visual Studio's [Connect page], I wrote
