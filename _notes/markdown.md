@@ -41,4 +41,4 @@ a path, a link or a header.
 {: .table .table-bordered }
 
 [Google]: https://www.google.com/
-[this document's source]: https://raw.githubusercontent.com/{{ site.github.repository_nwo }}/{{ site.github.source.branch }}/{{ page.path }}
+[this document's source]: https://raw.githubusercontent.com/{{ site.github.repository_nwo }}/gh-pages/{{ page.path }}
