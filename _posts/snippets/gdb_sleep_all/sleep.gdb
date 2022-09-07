@@ -1,2 +1,2 @@
-shell sleep 30
+shell sleep 10
 quit
