@@ -8,3 +8,6 @@ gem 'jekyll-tidy'
 
 # Jekyll 3.9.0 requires this as an explicit dependency:
 gem 'kramdown-parser-gfm'
+
+# Jekyll 3.9.2 requires this as an explicit dependency for Ruby 3:
+gem 'webrick'
