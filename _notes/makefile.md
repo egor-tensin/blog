@@ -3,7 +3,7 @@ title: Makefile
 subtitle: best practices
 layout: nosidebar
 links:
-  - {rel: stylesheet, href: 'assets/css/bash.css'}
+  - {rel: stylesheet, href: 'assets/css/guides.css'}
 features:
   - note: This should go on top of every Makefile.
     sections:
