@@ -1,65 +1,129 @@
 ---
 title: Makefile
 subtitle: best practices
+layout: nosidebar
+links:
+  - {rel: stylesheet, href: 'assets/css/bash.css'}
+features:
+  - note: This should go on top of every Makefile.
+    sections:
+      - do:
+          - |
+            MAKEFLAGS += --no-builtin-rules --no-builtin-variables --warn-undefined-variables
+            unexport MAKEFLAGS
+            .DEFAULT_GOAL := all
+            .DELETE_ON_ERROR:
+            .SUFFIXES:
+            SHELL := bash
+            .SHELLFLAGS := -eu -o pipefail -c
+
+            escape = $(subst ','\'',$(1))
+
+            define noexpand
+            ifeq ($$(origin $(1)),environment)
+                $(1) := $$(value $(1))
+            endif
+            ifeq ($$(origin $(1)),environment override)
+                $(1) := $$(value $(1))
+            endif
+            ifeq ($$(origin $(1)),command line)
+                override $(1) := $$(value $(1))
+            endif
+            endef
+  - note: Quote command arguments and use the `escape` function on variables and shell output.
+    sections:
+      - do:
+          - |
+            var := Includes ' quote
+            test:
+            	printf '%s\n' '$(call escape,$(var))'
+        dont:
+          - |
+            var := Includes space
+            test:
+            	printf '%s\n' $(var)
+          - |
+            var := Includes ' quote
+            test:
+            	printf '%s\n' '$(var)'
+      - do:
+          - |
+            cwd := $(shell pwd)
+            test:
+            	printf 'In directory %s\n' '$(call escape,$(cwd))'
+        dont:
+          - |
+            cwd := $(shell pwd)
+            test:
+            	printf 'In directory %s\n' $(cwd)
+          - |
+            cwd := $(shell pwd)
+            test:
+            	printf 'In directory %s\n' '$(cwd)'
+  - note: Use the `noexpand` function on environment variables or variables that can be overridden on the command line.
+    sections:
+      - do:
+          - |
+            has_default ?= Default value
+            $(eval $(call noexpand,has_default))
+
+            test:
+            	echo '$(call escape,$(has_default))'
+        dont:
+          - |
+            has_default ?= Default value
+
+            test:
+            	echo '$(call escape,$(has_default))'
+          - |
+            has_default ?= Default value
+            export has_default
+
+            test:
+            	echo "$$has_default"
+      - do:
+          - |
+            $(eval $(call noexpand,ENV_VAR))
+
+            test:
+            	echo '$(call escape,$(ENV_VAR))'
+        dont:
+          - |
+            test:
+            	echo '$(call escape,$(ENV_VAR))'
 ---
-Best practices for my Makefiles (sorry for the botched highlighting).
+I've made a [detailed blog post] about how all of this works.
+{: .alert .alert-info }
 
-```make
-# Put this in the top of the Makefile:
+[detailed blog post]: {{ site.baseurl }}{% post_url 2020-05-20-makefile-escaping %}
 
-MAKEFLAGS += --no-builtin-rules --no-builtin-variables --warn-undefined-variables
-unexport MAKEFLAGS
-.DEFAULT_GOAL := all
-.DELETE_ON_ERROR:
-.SUFFIXES:
-SHELL := bash
-.SHELLFLAGS := -eu -o pipefail -c
-
-escape = $(subst ','\'',$(1))
-
-define noexpand
-ifeq ($$(origin $(1)),environment)
-    $(1) := $$(value $(1))
-endif
-ifeq ($$(origin $(1)),environment override)
-    $(1) := $$(value $(1))
-endif
-ifeq ($$(origin $(1)),command line)
-    override $(1) := $$(value $(1))
-endif
-endef
-
-# OK, now some examples of how to use it:
-
-.PHONY: all
-all: test-escape test-noexpand
-
-# Always put command arguments in single quotes.
-# Escape variables and shell output using the escape function.
-
-var_with_quote := Includes ' quote
-
-.PHONY: test-escape
-test-escape:
-	printf '%s\n' '$(call escape,$(var_with_quote))'
-	printf '%s\n' '$(call escape,$(shell echo "Includes ' quote"))'
-
-# The above recipe will print "Includes ' quote" twice.
-
-# If you define variables using ?= or use environment variables in your
-# Makefile, use noexpand on them (to safeguard against ${accidental}
-# references).
-
-var_with_default ?= Accidental reference?
-$(eval $(call noexpand,var_with_default))
-
-$(eval $(call noexpand,env_var))
-
-.PHONY: test-noexpand
-test-noexpand:
-	printf '%s\n' '$(call escape,$(var_with_default))'
-	printf '%s\n' '$(call escape,$(env_var))'
-
-# The above recipe will print "Accidental ${reference}" twice if you run using
-# env_var='Accidental ${reference}' make var_with_default='Accidental ${reference}'
-```
+{% for feature in page.features %}
+  {{ feature.note | markdownify }}
+  {% for section in feature.sections %}
+<div class="row">
+  {% if section.do %}
+    {% if section.dont %}{% assign width = "6" %}{% else %}{% assign width = "12" %}{% endif %}
+    <div class="col-md-{{ width }}">
+      {% for guide in section.do %}
+        <div class="pre_container pre_do">
+          <pre>{{ guide }}</pre>
+          <div class="pre_mark"><span class="glyphicon glyphicon-ok"></span></div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if section.dont %}
+    {% if section.do %}{% assign width = "6" %}{% else %}{% assign width = "12" %}{% endif %}
+    <div class="col-md-{{ width }}">
+      {% for guide in section.dont %}
+        <div class="pre_container pre_dont">
+          <pre>{{ guide }}</pre>
+          <div class="pre_mark"><span class="glyphicon glyphicon-remove"></span></div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+  {% endfor %}
+  <hr/>
+{% endfor %}

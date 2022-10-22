@@ -2,6 +2,11 @@
 title: Escaping characters in Makefile
 excerpt: Making less error-prone.
 ---
+TL;DR: visit [this page] for a short and concise version of this article.
+{: .alert .alert-success }
+
+[this page]: {{ site.baseurl }}{% link _notes/makefile.md %}
+
 I'm a big sucker for irrelevant nitpicks like properly quoting arguments in
 shell scripts.
 I've also recently started using GNU make as a substitute for one-line shell
@@ -31,53 +36,6 @@ As issues of properly escaping "special" characters are going to be discussed,
 the choice of shell is very relevant.
 The Makefiles in this post specify `bash` explicitly using the `SHELL`
 variable, but the same rules should apply for all similar `sh`-like shells.
-
-TL;DR
------
-
-Visit [this page] for an all-in-one Makefile template.
-{: .alert .alert-info }
-
-[this page]: {{ site.baseurl }}{% link _notes/makefile.md %}
-
-* Put the prologue above at the top of your Makefile.
-* Quote command arguments in Makefiles using single quotes `'`.
-* Define a helper function:
-
-      escape = $(subst ','\'',$(1))
-
-  Instead of:
-
-      test:
-          echo '$(var)'
-
-  do
-
-      test:
-          echo '$(call escape,$(var))'
-
-* If you use environment variables in your Makefile (or you override variables
-on the command line), add the following lengthy snippet:
-
-      define noexpand
-      ifeq ($$(origin $(1)),environment)
-          $(1) := $$(value $(1))
-      endif
-      ifeq ($$(origin $(1)),environment override)
-          $(1) := $$(value $(1))
-      endif
-      ifeq ($$(origin $(1)),command line)
-          override $(1) := $$(value $(1))
-      endif
-      endef
-
-  Then `eval` the `noexpand` function output for every possibly overridden
-variable or a used environment variable:
-
-      has_default ?= Default value
-      $(eval $(call noexpand,has_default))
-
-      $(eval $(call noexpand,ENV_VAR))
 
 Quoting arguments
 -----------------
