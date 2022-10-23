@@ -10,8 +10,8 @@ A more-or-less complete, but still very basic LaTeX document follows.
 % Basic setup
 \usepackage{cmap}
 \usepackage[utf8]{inputenc}
-\usepackage[T2A]{fontenc}
-\usepackage[russian]{babel}
+\usepackage[T1]{fontenc} % Use T2A for non-ASCII scripts
+\usepackage[english]{babel}
 
 % Completely arbitrary settings follow:
 
@@ -31,8 +31,8 @@ A more-or-less complete, but still very basic LaTeX document follows.
 
 \begin{document}
 
-Привет, \LaTeX!
-Ссылка на репозиторий: \href{https://github.com/egor-tensin/blog}{https://github.com/egor-tensin/blog}.
+Hello, \LaTeX!
+Repository link: \href{https://github.com/egor-tensin/blog}{https://github.com/egor-tensin/blog}.
 
 \end{document}
 ```
