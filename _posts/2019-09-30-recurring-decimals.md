@@ -1,7 +1,5 @@
 ---
 title: Recurring decimals
-excerpt: >
-  Eighth-grader thoughts on recurring decimals.
 category: Math
 mathjax: true
 ---

@@ -1,6 +1,5 @@
 ---
 title: 'Docker: bind mounts & file ownership'
-excerpt: Docker + bind mounts + non-root users = pain.
 ---
 If you want to:
 

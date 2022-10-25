@@ -1,8 +1,5 @@
 ---
 title: Basic Ubuntu packaging
-excerpt: >
-  Packaging your software to be published in a PPA for the first time is a
-  pain.
 snippets_root_directory: snippets/ubuntu_packaging
 snippets_language: plain
 snippets:

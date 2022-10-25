@@ -1,7 +1,5 @@
 ---
 title: Pause all userspace processes
-excerpt: >
-  How do you pause all userspace processes for a certain amount of time?
 snippets_root_directory: snippets/gdb_sleep_all
 snippets_language: bash
 snippets:

@@ -1,7 +1,5 @@
 ---
 title: Building Boost on Windows
-excerpt: >
-  Building Boost on Windows using either Visual Studio or Cygwin + MinGW-w64.
 category: C++
 ---
 Below you can find the steps required to build Boost libraries on Windows.

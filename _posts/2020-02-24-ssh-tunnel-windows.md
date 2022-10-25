@@ -1,6 +1,5 @@
 ---
 title: Persistent SSH tunnel
-excerpt: ... using Cygwin.
 ---
 SSH tunneling is awesome.
 For some reason, I've only recently learned about this feature, but I've been

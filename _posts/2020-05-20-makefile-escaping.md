@@ -1,6 +1,5 @@
 ---
 title: Escaping characters in Makefile
-excerpt: Making less error-prone.
 ---
 TL;DR: visit [this page] for a short and concise version of this article.
 {: .alert .alert-success }

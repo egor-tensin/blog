@@ -1,8 +1,5 @@
 ---
 title: std::call_once bug in Visual C++ 2012/2013
-excerpt: >
-  There's a nasty bug in the C++ Standard Library implementation shipped with
-  Microsoft Visual Studio 2012/2013.
 category: C++
 ---
 I've recently come across a nasty standard library bug in the implementation

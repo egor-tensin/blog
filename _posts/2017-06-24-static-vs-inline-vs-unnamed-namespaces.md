@@ -1,8 +1,5 @@
 ---
 title: static vs. inline vs. namespace&nbsp;{
-excerpt: >
-  Should I use `static`, `inline` or unnamed namespaces for function
-  definitions?
 category: C++
 snippets_root_directory: snippets/static_vs_inline_vs_unnamed_namespaces
 snippets_language: c++
