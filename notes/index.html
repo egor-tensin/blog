@@ -3,13 +3,29 @@ title: Notes
 navbar:
   link: Notes
   priority: 3
+layout: default
 sidebar:
   notes:
     hide: true
 ---
+<h1>{% include jekyll-theme/categories/label.html category='Notes' feed=true %}</h1>
 {% if site.notes.size > 0 %}
-  <p>Style guides and best practices, not worthy of a post.</p>
-  {% include notes.html %}
+  {% comment %}
+    Sorting can be done in _config.yml with Jekyll 4.0 or later.
+  {% endcomment %}
+  {% assign note_list = site.notes | sort_natural: 'title' %}
+  {% for note in note_list %}
+  <a href="{{ note.url | relative_url }}" class="feed-entry">
+    <div class="post-header">
+      <h5 class="text-monospace">{{ note.title }}</h5>
+      <div class="post-date">
+        <p class="text-muted font-size-90">
+          <span class="glyphicon glyphicon-menu-right"></span>&nbsp;<span class="text-monospace">{{ note.subtitle }}</span>
+        </p>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
 {% else %}
   <p>Sorry, no notes have been added yet.</p>
 {% endif %}

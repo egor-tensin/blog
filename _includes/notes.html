@@ -3,21 +3,15 @@
 {% endcomment %}
 {% assign note_list = site.notes | sort_natural: 'title' %}
 <div class="list-group wide-enough">
-  {% assign h = 'h4' %}
-  {% if include.sidebar %}
-    {% assign h = 'h5' %}
-  {% endif %}
-  {% if include.sidebar %}
   <div class="list-group-item disabled">
     <h4 class="list-group-item-heading">notes</h4>
   </div>
-  {% endif %}
   {% for note in note_list %}
   <a href="{{ note.url | relative_url }}" class="list-group-item">
-    <{{ h }} class="list-group-item-heading post-header">
+    <h5 class="list-group-item-heading post-header">
       <span>{{ note.title }}</span>
       <small class="post-date"><span class="glyphicon glyphicon-menu-right"></span>&nbsp;{{ note.subtitle }}</small>
-    </{{ h }}>
+    </h5>
   </a>
   {% endfor %}
 </div>
