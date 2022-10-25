@@ -68,6 +68,9 @@ settings:
   author:
     name: Egor Tensin
     email: Egor.Tensin@gmail.com
+  sidebar:
+    latest_posts:
+      hide: true
   links:
     - {rel: apple-touch-icon, sizes: 180x180, href: /assets/favicon/apple-touch-icon.png}
     - {rel: icon, type: image/png, sizes: 32x32, href: /assets/favicon/favicon-32x32.png}
