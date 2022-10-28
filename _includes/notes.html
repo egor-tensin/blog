@@ -8,9 +8,9 @@
   </div>
   {% for note in note_list %}
   <a href="{{ note.url | relative_url }}" class="list-group-item">
-    <h5 class="list-group-item-heading post-header">
+    <h5 class="list-group-item-heading flex-header">
       <span>{{ note.title }}</span>
-      <small class="post-date"><span class="glyphicon glyphicon-menu-right"></span>&nbsp;{{ note.subtitle }}</small>
+      <small class="flex-header-right"><span class="glyphicon glyphicon-menu-right"></span>&nbsp;{{ note.subtitle }}</small>
     </h5>
   </a>
   {% endfor %}

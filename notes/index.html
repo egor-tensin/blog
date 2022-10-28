@@ -8,7 +8,7 @@ sidebar:
   notes:
     hide: true
 ---
-<h1>{% include jekyll-theme/categories/label.html category='Notes' feed=true %}</h1>
+<h1>{% include jekyll-theme/categories/label.html category='Notes' monospace=true %}</h1>
 {% if site.notes.size > 0 %}
   {% comment %}
     Sorting can be done in _config.yml with Jekyll 4.0 or later.
@@ -16,14 +16,9 @@ sidebar:
   {% assign note_list = site.notes | sort_natural: 'title' %}
   {% for note in note_list %}
   <a href="{{ note.url | relative_url }}" class="feed-entry">
-    <div class="post-header">
-      <h5 class="text-monospace">{{ note.title }}</h5>
-      <div class="post-date">
-        <p class="text-muted font-size-90">
-          <span class="glyphicon glyphicon-menu-right"></span>&nbsp;<span class="text-monospace">{{ note.subtitle }}</span>
-        </p>
-      </div>
-    </div>
+    {% capture title %}<h5 class="text-monospace">{{ note.title }}</h5>{% endcapture %}
+    {% capture label %}<p><span class="glyphicon glyphicon-menu-right"></span>&nbsp;<span class="text-monospace">{{ note.subtitle }}</span></p>{% endcapture %}
+    {% include jekyll-theme/flex-header.html title=title right=label %}
   </a>
   {% endfor %}
 {% else %}
