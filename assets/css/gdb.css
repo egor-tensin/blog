@@ -1,0 +1,5 @@
+td code {
+  /* Override Bootstrap styling in tables: */
+  padding: 0;
+  background-color: inherit;
+}
