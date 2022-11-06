@@ -28,7 +28,7 @@ Core dumps
   | List dumps            | `coredumpctl`
   | Debug the last dump   | `coredumpctl gdb`
   | Extract the last dump | `coredumpctl dump -o core`
-  {: .table .table-bordered .table-condensed }
+  {: .table .table-bordered }
   </div>
 
 .gdbinit
@@ -63,7 +63,7 @@ Basics
 | Step over line          | `n`
 | Step over instruction   | `si`
 | Step out of frame       | `fin`
-{: .table .table-bordered .table-condensed }
+{: .table .table-bordered }
 
 </div>
 
@@ -87,7 +87,7 @@ Data inspection
 | Disassemble all code sections | `objdump -d /proc/self/exe`
 | Disassemble a single section  | `objdump -d -j .init /proc/self/exe`
 | Display the section contents  | `objdump -s -j .data /proc/self/exe`
-{: .table .table-bordered .table-condensed }
+{: .table .table-bordered }
 
 </div>
 
