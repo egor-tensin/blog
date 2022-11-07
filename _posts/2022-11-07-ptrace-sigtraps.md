@@ -4,8 +4,8 @@ date: 2022-11-07 13:00 +0100
 ---
 When using `PTRACE_ATTACH` the `ptrace` mechanism reuses SIGTRAP for a number
 of things by default.
-This makes it unnecessarily hard to distinguish regular traps possibly caused
-by breakpoints we might place from other events.
+This makes it unnecessarily hard to distinguish regular traps (possibly caused
+by breakpoints we might place) from other events.
 
 1. After `ptrace(PTRACE_SYSCALL)`, syscall-stops will be reported as SIGTRAPs.
 
