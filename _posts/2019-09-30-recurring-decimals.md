@@ -1,6 +1,5 @@
 ---
 title: Recurring decimals
-category: Math
 mathjax: true
 ---
 First, let's determine that
