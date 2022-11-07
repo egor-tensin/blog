@@ -57,7 +57,7 @@ plugins:
 # jekyll-github-metadata
 repository: egor-tensin/blog
 # jekyll-paginate
-paginate: 10
+paginate: 100
 # jekyll-remote-theme
 remote_theme: egor-tensin/jekyll-theme@713aa48f60d337743917fd21347594561eef377b
 
