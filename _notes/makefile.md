@@ -1,5 +1,5 @@
 ---
-title: Makefile
+title: make
 subtitle: best practices
 layout: nosidebar
 links:

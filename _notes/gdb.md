@@ -1,5 +1,5 @@
 ---
-title: GDB
+title: gdb
 subtitle: cheat sheet
 links:
   - {rel: stylesheet, href: 'assets/css/gdb.css'}
