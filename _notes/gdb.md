@@ -51,7 +51,8 @@ Basics
 
 | Run                     | `r`
 | Continue                | `c`
-| Create breakpoint       | `b FUNC`
+| Breakpoint at function  | `b FUNC`
+| Breakpoint at address   | `b *0xdeadbeef`
 | List breakpoints        | `i b`
 | Disable breakpoint      | `dis N`
 | Enable breakpoint       | `en N`
@@ -59,6 +60,7 @@ Basics
 | Call stack              | `bt`
 | Call stack: all threads | `thread apply all bt`
 | Go to frame             | `f N`
+| Switch to thread        | `t N`
 | Disassemble             | `disas FUNC`
 | Step over line          | `n`
 | Step over instruction   | `si`
