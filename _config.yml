@@ -10,6 +10,7 @@ exclude:
   - serve.bat
   - serve.sh
   - README.md
+  - deps.sh
 
 paginate: 10
 
