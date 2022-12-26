@@ -7,3 +7,8 @@ jquery_version: 1.11.3
 html5shiv_version: 3.7.2
 respond_version: 1.4.2
 minified_externals: true
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - deps.sh
