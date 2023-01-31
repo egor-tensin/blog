@@ -36,6 +36,8 @@ status changes from other thread's children.
 So if you have two tracer threads A and B, and each of them is attached to a
 tracee, then thread A might consume thread B's tracee status change by calling
 `waitpid(-1)`.
+Therefore, thread A would have thread B's tracee status.
+A typical application could be completely unprepared for this scenario.
 
 To avoid that, use the `__WNOTHREAD` flag.
 That way, thread A will only consume status changes from its own children only.
