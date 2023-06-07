@@ -4,7 +4,7 @@ title: Escaping characters in Makefile
 TL;DR: visit [this page] for a short and concise version of this article.
 {: .alert .alert-success }
 
-[this page]: {{ site.baseurl }}{% link _notes/makefile.md %}
+[this page]: {% link _notes/makefile.md %}
 
 I'm a big sucker for irrelevant nitpicks like properly quoting arguments in
 shell scripts.

@@ -95,7 +95,7 @@ features:
 I've made a [detailed blog post] about how all of this works.
 {: .alert .alert-info }
 
-[detailed blog post]: {{ site.baseurl }}{% post_url 2020-05-20-makefile-escaping %}
+[detailed blog post]: {% post_url 2020-05-20-makefile-escaping %}
 
 {% for feature in page.features %}
   {{ feature.note | markdownify }}

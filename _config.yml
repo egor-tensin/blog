@@ -6,16 +6,13 @@ show_drafts: true
 strict_front_matter: true
 
 exclude:
-  - Gemfile
-  - Gemfile.lock
   - Makefile
   - README.md
-  - vendor/
 
 collections:
   notes:
     output: true
-    # Jekyll 4.0 or later:
+    # I want the "natural" sorting (a.k.a. whatever the sort_natural filter does).
     #sort_by: title
 
 defaults:
@@ -58,7 +55,7 @@ repository: egor-tensin/blog
 # jekyll-paginate
 paginate: 100
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@6c88a165e81877a9e56ede789c07e3e0d2e05601
+remote_theme: egor-tensin/jekyll-theme@4ccad582f01cbfe19956fc6bfe589e599e7e85d3
 
 # Theme settings
 settings:
