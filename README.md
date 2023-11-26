@@ -3,7 +3,7 @@ My blog
 
 [![Jekyll](https://github.com/egor-tensin/blog/actions/workflows/jekyll.yml/badge.svg)](https://github.com/egor-tensin/blog/actions/workflows/jekyll.yml)
 
-My blog, hosted at https://egort.name/blog/.
+My blog, hosted at https://tensin.name/blog/.
 
 Development
 -----------
