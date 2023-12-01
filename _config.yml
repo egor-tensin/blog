@@ -58,7 +58,7 @@ repository: egor-tensin/blog
 # jekyll-paginate
 paginate: 100
 # jekyll-remote-theme
-remote_theme: egor-tensin/jekyll-theme@ac233bb760b4947f0126ba17d78c182bb8f7ff1f
+remote_theme: egor-tensin/jekyll-theme@2028afbf8795e2a42b4799ab3141239d57df3929
 
 # Theme settings
 settings:
@@ -66,7 +66,7 @@ settings:
     name: Blog
   author:
     name: Egor Tensin
-    email: Egor.Tensin@gmail.com
+    email: egor@tensin.name
   sidebar:
     latest_posts:
       hide: true
