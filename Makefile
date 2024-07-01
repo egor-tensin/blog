@@ -17,12 +17,11 @@ deps: ruby
 .PHONY: maintenance
 maintenance: ruby
 	bundle update
+
 	@git_status="$$( git status --porcelain=v1 )" && \
-	file_statuses="$$( echo "$$git_status" | cut -c 1-2 | sort -u )" && \
-	file_names="$$( echo "$$git_status" | cut -c 4- | grep -o '[^/]*$$' | sort -u )" && \
 	if [ -z "$$git_status" ]; then \
 		true ; \
-	elif [ "$$file_statuses $$file_names" = ' M Gemfile.lock' ]; then \
+	elif [ "$$git_status" = ' M Gemfile.lock' ]; then \
 		git commit -am 'bump dependencies' && \
 			git push -q ; \
 	else \
