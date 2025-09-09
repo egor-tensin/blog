@@ -16,6 +16,7 @@ deps: ruby
 
 .PHONY: maintenance
 maintenance: ruby
+	bundle config set frozen false
 	bundle update
 
 	@git_status="$$( git status --porcelain=v1 )" && \
