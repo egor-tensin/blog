@@ -21,12 +21,12 @@ maintenance: ruby
 
 	@git_status="$$( git status --porcelain=v1 )" && \
 	if [ -z "$$git_status" ]; then \
-		true ; \
+		true; \
 	elif [ "$$git_status" = ' M Gemfile.lock' ]; then \
 		git commit -am 'bump dependencies' && \
-			git push -q ; \
+			git push -q; \
 	else \
-		echo ; \
+		echo; \
 		echo '-----------------------------------------------------------------'; \
 		echo 'Error: unrecognized modifications in the repository:'; \
 		echo "$$git_status"; \
