@@ -1,5 +1,5 @@
+/build/
 /.bundle/
-/.jekyll-cache/
-/_site/
+.jekyll-cache/
 /.wget/
 /vendor/

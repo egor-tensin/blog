@@ -1,16 +1,12 @@
 # Jekyll
+source: src
+destination: build
+
 baseurl: /blog
 host: 0.0.0.0
 open_url: true
 show_drafts: true
 strict_front_matter: true
-
-exclude:
-  - .wget/
-  - DEVELOPMENT.md
-  - Makefile
-  - prelude.mk
-  - README.md
 
 collections:
   notes:
