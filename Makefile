@@ -19,23 +19,7 @@ deps: ruby
 
 .PHONY: maintenance
 maintenance: ruby
-	bundle config set frozen false
-	bundle update
-
-	@git_status="$$( git status --porcelain=v1 )" && \
-	if [ -z "$$git_status" ]; then \
-		true; \
-	elif [ "$$git_status" = ' M Gemfile.lock' ]; then \
-		git commit -am 'bump dependencies' && \
-			git push -q; \
-	else \
-		echo; \
-		echo '-----------------------------------------------------------------'; \
-		echo 'Error: unrecognized modifications in the repository:'; \
-		echo "$$git_status"; \
-		echo '-----------------------------------------------------------------'; \
-		exit 1; \
-	fi
+	./scripts/maintenance.sh
 
 jekyll := bundle exec jekyll
 
