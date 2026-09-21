@@ -1,5 +1,5 @@
-// Copyright (c) 2016 Egor Tensin <Egor.Tensin@gmail.com>
-// This file is part of the "Egor's blog" project.
+// Copyright (c) 2016 Egor Tensin <egor@tensin.name>
+// This file is part of the "My blog" project.
 // For details, see https://github.com/egor-tensin/blog
 // Distributed under the MIT License.
 
