@@ -1,7 +1,7 @@
 My blog
 =======
 
-My blog, hosted at https://egor-tensin.github.io/blog/.
+My blog, hosted at https://tensin.name/blog/
 
 License
 -------
